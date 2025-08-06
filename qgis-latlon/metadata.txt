@@ -1,0 +1,16 @@
+[general]
+name=QGIS LatLon Plugin
+description=Captura cliques no mapa e exibe coordenadas com opção de salvar ponto.
+version=0.1
+author=Jubilio Mausse
+email=jubiliomausse5@gmail.com
+qgisMinimumVersion=3.0
+class_name=QgisLatLonPlugin
+package_name=qgis_latlon
+
+[files]
+__init__.py
+qgis_latlon.py
+
+[icons]
+icon.png

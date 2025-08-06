@@ -1,0 +1,23 @@
+# Python cache files
+__pycache__/
+*.py[cod]
+
+# QGIS specific files
+*.log
+*.bak
+*.swp
+
+# Virtual environment
+venv/
+env/
+.env/
+
+# IDE specific files
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# OS generated files
+.DS_Store
+Thumbs.db
