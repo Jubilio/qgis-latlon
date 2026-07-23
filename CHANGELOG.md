@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.2.4 — 2026-07-23
+
+- Added safe HTTPS redirect handling to reverse-geocoding requests.
+- Added an explicit transfer timeout and a valid application User-Agent.
+- Added one retry for transient network failures, HTTP 429 and selected HTTP 5xx responses.
+- Added detailed HTTP status, network and SSL/TLS diagnostics to the QGIS message log.
+- Added clearer messages for provider rejection, rate limiting and coordinates with no address result.
+- Kept point capture independent from the availability of the external geocoding service.
+
 ## 1.2.3 — 2026-07-23
 
 - Replaced all 12 unscoped Qt 5/QGIS enum accesses reported by the QGIS Qt 6 validator.
