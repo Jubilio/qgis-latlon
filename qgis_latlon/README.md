@@ -2,7 +2,18 @@
 
 **GeoClick Capture** builds auditable point logs for field verification, map review and GIS quality assurance.
 
-## Version 1.2.3
+## Version 1.2.4
+
+This release strengthens optional reverse geocoding:
+
+- follows only safe HTTPS redirects;
+- sets a 20-second request timeout;
+- identifies the plugin with a valid application User-Agent;
+- records HTTP, SSL/TLS and network diagnostics in the QGIS log;
+- retries once for temporary network failures and HTTP 429/5xx responses;
+- distinguishes provider rejection, rate limiting and coordinates with no address result.
+
+Captured points are still saved even when the external geocoding service is unavailable.
 
 This maintenance release scopes every Qt/QGIS enum reported by the QGIS Qt 6 validator in the base implementation. It covers dock placement, geometry types, message levels, identify modes, message-box buttons and vector-writer errors, while preserving PyQt 5 fallbacks for QGIS 3.
 
@@ -22,7 +33,7 @@ Captured records include UTC time, WGS 84 coordinates, project coordinates, proj
 ## Installation
 
 1. Open **QGIS → Plugins → Manage and Install Plugins → Install from ZIP**.
-2. Select `geoclick_capture-1.2.3.zip`.
+2. Select `geoclick_capture-1.2.4.zip`.
 3. Restart or reload the plugin after replacing an older installation.
 
 ## Usage

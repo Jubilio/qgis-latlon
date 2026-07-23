@@ -1,8 +1,8 @@
 [general]
 name=GeoClick Capture
 description=Log auditable map clicks with Qt 6 support and automatic snapping to line/polygon vertices and segments.
-about=GeoClick Capture is a lightweight capture-log tool for field verification, map review and GIS quality assurance. Version 1.2.3 supports QGIS 4 / Qt 6 and automatically attracts captures to nearby vertices or segments in visible line and polygon layers. A dock panel manages sessions, operator, category, status, notes and destination layers. Each click records UTC time, WGS 84 coordinates, original map coordinates, project information and source-feature context. Records can be reviewed, deleted, undone and exported to CSV, GeoJSON or GeoPackage. Optional reverse geocoding uses the QGIS network manager with caching, rate limiting, timeout and OpenStreetMap attribution. There are no external Python dependencies.
-version=1.2.3
+about=GeoClick Capture is a lightweight capture-log tool for field verification, map review and GIS quality assurance. Version 1.2.4 supports QGIS 4 / Qt 6 and automatically attracts captures to nearby vertices or segments in visible line and polygon layers. A dock panel manages sessions, operator, category, status, notes and destination layers. Each click records UTC time, WGS 84 coordinates, original map coordinates, project information and source-feature context. Records can be reviewed, deleted, undone and exported to CSV, GeoJSON or GeoPackage. Optional reverse geocoding uses the QGIS network manager with safe redirects, caching, rate limiting, timeout, one transient retry, detailed diagnostics and OpenStreetMap attribution. There are no external Python dependencies.
+version=1.2.4
 qgisMinimumVersion=3.28
 qgisMaximumVersion=4.99
 author=Jubílio Maússe
@@ -14,7 +14,8 @@ license=MIT
 icon=icons/icon.svg
 category=Vector
 tags=coordinate capture,field verification,point logging,snapping,vertex,segment,quality assurance,audit trail,WGS84
-changelog=1.2.3 - Replaced all 12 unscoped Qt 5/QGIS enum accesses in the base implementation with Qt 6-scoped enums and PyQt 5 fallbacks; expanded AST validation for the complete package.
+changelog=1.2.4 - Improved reverse geocoding with safe redirect handling, transfer timeout, application identification, SSL/HTTP diagnostics, one retry for transient failures and clearer no-result messages.
+    1.2.3 - Replaced all 12 unscoped Qt 5/QGIS enum accesses in the base implementation with Qt 6-scoped enums and PyQt 5 fallbacks; expanded AST validation for the complete package.
     1.2.2 - Fixed false GitHub Actions failures by analysing executable Qt enum access and validating only tracked cache files; runtime Qt 5/Qt 6 compatibility and geometry snapping remain unchanged.
     1.2.1 - Fixed QGIS 4 / Qt 6 dock enum compatibility and added automatic vertex-first/segment fallback snapping with configurable pixel tolerance and snapping audit fields.
     1.2.0 - Added Capture Log dock panel, capture sessions, operator/category/status/note fields, destination layer selector, table review, undo/delete/clear actions, persistent preferences, project and source-feature audit fields, GeoJSON export, geocoding cache, one-request-per-second rate limiting, timeout and OpenStreetMap attribution.
