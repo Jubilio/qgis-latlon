@@ -19,16 +19,39 @@ def attribute_name(node):
 
 
 class Qt6AndSnappingSourceTests(unittest.TestCase):
-    def test_unscoped_dock_enums_are_not_executed(self):
-        source = (PLUGIN / "dock_widget.py").read_text(encoding="utf-8")
-        tree = ast.parse(source)
-        attributes = {
-            attribute_name(node)
-            for node in ast.walk(tree)
-            if isinstance(node, ast.Attribute)
+    def test_reported_unscoped_enums_are_not_executed(self):
+        forbidden = {
+            "Qt.RightDockWidgetArea",
+            "QgsWkbTypes.PointGeometry",
+            "QMessageBox.Yes",
+            "QgsVectorFileWriter.NoError",
+            "Qgis.Info",
+            "Qgis.Success",
+            "QgsMapToolIdentify.TopDownStopAtFirst",
+            "QgsMapToolIdentify.VectorLayer",
         }
-        self.assertNotIn("Qt." + "LeftDockWidgetArea", attributes)
-        self.assertNotIn("Qt." + "RightDockWidgetArea", attributes)
+        attributes = set()
+        for path in PLUGIN.rglob("*.py"):
+            tree = ast.parse(path.read_text(encoding="utf-8"))
+            attributes.update(
+                attribute_name(node)
+                for node in ast.walk(tree)
+                if isinstance(node, ast.Attribute)
+            )
+        self.assertFalse(forbidden & attributes, forbidden & attributes)
+
+    def test_scoped_enum_groups_are_declared(self):
+        source = (PLUGIN / "qgis_latlon.py").read_text(encoding="utf-8")
+        for group in (
+            "DockWidgetArea",
+            "GeometryType",
+            "StandardButton",
+            "WriterError",
+            "MessageLevel",
+            "IdentifyMode",
+            '"Type", "VectorLayer"',
+        ):
+            self.assertIn(group, source)
 
     def test_snapping_extension_contains_vertex_and_edge_fallback(self):
         source = (PLUGIN / "plugin_v121.py").read_text(encoding="utf-8")
