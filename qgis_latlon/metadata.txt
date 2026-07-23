@@ -1,0 +1,19 @@
+[general]
+name=QGIS LatLon
+description=Capture map coordinates, save points and export them to CSV, GeoPackage or Shapefile.
+about=QGIS LatLon captures a clicked map position, converts it safely to WGS 84, displays decimal and DMS coordinates, records the source layer, copies coordinates to the clipboard and stores points in a new or existing point layer. Optional reverse geocoding uses OpenStreetMap Nominatim.
+version=1.0.0
+qgisMinimumVersion=3.28
+qgisMaximumVersion=4.99
+author=Jubílio Maússe
+email=jubiliomausse5@gmail.com
+homepage=https://github.com/Jubilio/qgis-latlon
+repository=https://github.com/Jubilio/qgis-latlon
+tracker=https://github.com/Jubilio/qgis-latlon/issues
+icon=icons/icon.svg
+category=Vector
+tags=coordinates,latitude,longitude,DMS,WGS84,capture,GIS,points,CSV,GeoPackage
+experimental=False
+deprecated=False
+hasProcessingProvider=False
+supportsQt6=True
