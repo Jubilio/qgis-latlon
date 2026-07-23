@@ -1,18 +1,21 @@
 [general]
-name=QGIS LatLon
-description=Capture map coordinates, save points and export them to CSV, GeoPackage or Shapefile.
-about=QGIS LatLon captures a clicked map position, converts it safely to WGS 84, displays decimal and DMS coordinates, records the source layer, copies coordinates to the clipboard and stores points in a new or existing point layer. Optional reverse geocoding uses OpenStreetMap Nominatim.
-version=1.0.0
+name=GeoClick Capture
+description=Log map clicks to a point layer with WGS 84 and project coordinates, timestamps and optional reverse geocoding.
+about=GeoClick Capture is a lightweight point-logging tool for field verification, map review and quality assurance. Each click creates an auditable record containing UTC capture time, WGS 84 latitude/longitude, original project coordinates, project CRS, the first vector layer below the click and an optional OpenStreetMap place name. Capture and export work locally. Reverse geocoding is disabled by default and uses the QGIS network manager; there are no external Python dependencies.
+version=1.1.0
 qgisMinimumVersion=3.28
 qgisMaximumVersion=4.99
 author=Jubílio Maússe
 email=jubiliomausse5@gmail.com
-homepage=https://github.com/Jubilio/qgis-latlon
+homepage=https://github.com/Jubilio/qgis-latlon#readme
 repository=https://github.com/Jubilio/qgis-latlon
 tracker=https://github.com/Jubilio/qgis-latlon/issues
+license=MIT
 icon=icons/icon.svg
 category=Vector
-tags=coordinates,latitude,longitude,DMS,WGS84,capture,GIS,points,CSV,GeoPackage
+tags=coordinate capture,field data,point logging,digitizing,WGS84,reverse geocoding,quality assurance
+changelog=1.1.0 - Repositioned the plugin as a lightweight point logger; added UTC timestamps, original map coordinates and project CRS fields; moved actions to the Vector menu; added submission-ready metadata, packaged licence, documentation and sample data.
+    1.0.0 - Corrected CRS handling, layer writing, exports, Qt compatibility and asynchronous reverse geocoding.
 experimental=False
 deprecated=False
 hasProcessingProvider=False
