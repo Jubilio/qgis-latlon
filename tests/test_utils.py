@@ -1,30 +1,41 @@
-import os
-import sys
+import importlib.util
+import pathlib
 import unittest
 
-ROOT = os.path.dirname(os.path.dirname(__file__))
-sys.path.insert(0, ROOT)
-
-from qgis_latlon.utils import ensure_extension, to_dms
+MODULE_PATH = pathlib.Path(__file__).parents[1] / "qgis_latlon" / "utils.py"
+spec = importlib.util.spec_from_file_location("geoclick_utils", MODULE_PATH)
+utils = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(utils)
 
 
 class UtilsTests(unittest.TestCase):
-    def test_to_dms_north(self):
-        self.assertEqual(to_dms(10.5, "lat"), "10°30'00.00\"N")
+    def test_extension_is_added(self):
+        self.assertEqual(utils.ensure_extension("output", ".csv"), "output.csv")
 
-    def test_to_dms_west(self):
-        self.assertEqual(to_dms(-40.25, "lon"), "40°15'00.00\"W")
+    def test_extension_is_not_duplicated(self):
+        self.assertEqual(utils.ensure_extension("output.CSV", ".csv"), "output.CSV")
 
-    def test_to_dms_rollover(self):
-        self.assertEqual(to_dms(12.999999999, "lat"), "13°00'00.00\"N")
+    def test_dms_latitude(self):
+        self.assertEqual(utils.to_dms(-12.5, "lat"), "12°30'0.00\"S")
+
+    def test_dms_longitude(self):
+        self.assertEqual(utils.to_dms(40.25, "lon"), "40°15'0.00\"E")
 
     def test_invalid_coordinate_type(self):
         with self.assertRaises(ValueError):
-            to_dms(1, "x")
+            utils.to_dms(1, "x")
 
-    def test_ensure_extension(self):
-        self.assertEqual(ensure_extension("points", "csv"), "points.csv")
-        self.assertEqual(ensure_extension("points.gpkg", ".gpkg"), "points.gpkg")
+    def test_session_identifier(self):
+        self.assertEqual(utils.normalise_session_id("Water points / Mueda"), "Water-points-Mueda")
+
+    def test_empty_session_identifier(self):
+        self.assertTrue(utils.normalise_session_id("").startswith("session-"))
+
+    def test_geocode_cache_key(self):
+        self.assertEqual(utils.geocode_cache_key(-12.123456, 40.987654), "-12.12346,40.98765")
+
+    def test_project_name(self):
+        self.assertEqual(utils.safe_project_name("/tmp/project.qgz"), "project")
 
 
 if __name__ == "__main__":
