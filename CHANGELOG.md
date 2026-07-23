@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.2.1 — 2026-07-23
+
+- Fixed `Qt.LeftDockWidgetArea` and `Qt.RightDockWidgetArea` compatibility under QGIS 4 / PyQt 6.
+- Added Qt 5/Qt 6-safe table selection enums and point-layer filtering.
+- Added automatic snapping to visible line and polygon layers.
+- Project snapping is respected first; automatic fallback prefers vertices and then segments.
+- Added configurable snap tolerance in pixels.
+- Added `snapped`, `snap_type` and `snap_distance` audit fields.
+- Added a Qt 5/Qt 6-safe clear-session confirmation dialog.
+
 ## 1.2.0 — 2026-07-23
 
 - Added the dockable Capture Log panel.
@@ -14,27 +24,11 @@
 
 ## 1.1.0 — 2026-07-23
 
-- Renamed the public plugin identity to **GeoClick Capture** to avoid confusion with broad coordinate-conversion suites.
+- Renamed the public plugin identity to **GeoClick Capture**.
 - Repositioned the tool around point logging for field verification and GIS quality assurance.
-- Added UTC capture timestamps.
-- Added original project X/Y coordinates and project CRS to each record.
-- Moved plugin actions to the QGIS **Vector** menu.
-- Added `license` and multiline `changelog` metadata.
-- Added the licence and README inside the installable plugin folder.
-- Added a minimal GeoJSON dataset for testing.
-- Updated the build artifact name and submission documentation.
+- Added UTC capture timestamps and original project coordinates.
+- Added submission-ready metadata, packaged licence, documentation and sample data.
 
 ## 1.0.0 — 2026-07-23
 
-- Fixed the invalid `QgsMapToolIdentify` import.
-- Replaced direct PyQt5 imports with `qgis.PyQt` for Qt 5/Qt 6 compatibility.
-- Added correct transformation from the project CRS to WGS 84.
-- Added correct transformation when writing to an existing layer in another CRS.
-- Added missing-field validation for reused point layers.
-- Prevented duplicate IDs when an existing layer is selected.
-- Replaced the deprecated vector export call with `writeAsVectorFormatV3`.
-- Improved file-extension handling and CSV Unicode compatibility.
-- Replaced blocking `requests` geocoding with optional asynchronous QGIS networking.
-- Replaced modal capture popups with QGIS message-bar notifications.
-- Corrected plugin package naming to `qgis_latlon`.
-- Added metadata, tests, documentation and a new SVG icon.
+- Corrected CRS handling, layer writing, exports, Qt compatibility and asynchronous reverse geocoding.
