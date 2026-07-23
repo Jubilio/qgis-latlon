@@ -29,7 +29,7 @@ class ReverseGeocodingSourceTests(unittest.TestCase):
 
     def test_no_result_uses_broader_osm_levels(self):
         for token in (
-            "Unable to geocode",
+            "unable to geocode",
             "ZOOM_LEVELS = (18, 15, 10, 5, 3)",
             '"layer": "address"',
             "searching for a broader area",
