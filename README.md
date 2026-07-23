@@ -1,62 +1,66 @@
-# QGIS LatLon Plugin
+# QGIS LatLon
 
-**QGIS LatLon Plugin** é uma ferramenta leve e poderosa para capturar coordenadas clicadas no mapa dentro do QGIS. O plugin registra informações detalhadas como latitude, longitude, sistema de referência (EPSG), e a camada sob o ponto clicado, se existir.
+**QGIS LatLon** is a lightweight QGIS plugin for capturing a position on the map, converting it correctly to WGS 84 and storing the result in a point layer.
 
-## 🔧 Funcionalidades
+## Main features
 
-- Captura coordenadas de cliques no mapa
-- Armazena as coordenadas em uma camada vetorial de pontos
-- Exibe popup com:
-  - Latitude/Longitude
-  - Coordenadas em DMS (graus, minutos, segundos)
-  - Código EPSG do projeto
-  - Nome da camada sob o clique (se houver)
-- Copia coordenadas para a área de transferência
-- Exporta pontos para CSV
-- Exporta pontos para Shapefile ou GeoPackage (GPKG)
-- Permite usar uma camada vetorial de pontos existente
+- Captures coordinates from any project CRS and stores latitude/longitude in EPSG:4326.
+- Shows decimal coordinates and DMS notation.
+- Identifies the first vector layer below the clicked position.
+- Copies the most recently captured coordinate to the clipboard.
+- Creates a temporary point layer or reuses an existing point layer.
+- Transforms the geometry correctly to the CRS of the selected output layer.
+- Exports records to CSV, GeoPackage or Shapefile.
+- Offers optional, non-blocking reverse geocoding through OpenStreetMap Nominatim.
+- Uses `qgis.PyQt`, supporting Qt 5 and Qt 6 environments.
 
-## 📦 Instalação
+## Installation from ZIP
 
-1. Compacte a pasta `qgis-latlon` como um `.zip`, contendo:
-   - `__init__.py`
-   - `qgis_latlon.py`
-   - `metadata.txt`
-   - `icons/icon.png`
+1. Download `qgis_latlon-1.0.0.zip` from the repository release or build output.
+2. Open **QGIS → Plugins → Manage and Install Plugins**.
+3. Select **Install from ZIP**.
+4. Choose the ZIP and confirm the installation.
 
-2. No QGIS, vá em:
-   - `Plugins > Manage and Install Plugins > Install from ZIP`
+The ZIP must contain a single top-level folder named `qgis_latlon`.
 
-3. Selecione o `.zip` e clique em `Install Plugin`
+## Usage
 
-## 🚀 Como usar
+1. Click **Capture coordinates** in the toolbar or the **QGIS LatLon** plugin menu.
+2. Click a position on the map.
+3. The plugin creates `Pontos Capturados` when no destination layer has been selected.
+4. Use the plugin menu to copy the last coordinate, export the data or select an existing point layer.
+5. Reverse geocoding is disabled by default. Enable it only when a location name is required and internet access is available.
 
-1. Após instalar, clique no ícone `LatLon Click Capture` na barra de ferramentas
-2. Clique no mapa para capturar coordenadas
-3. Use o menu `Plugins > LatLon Plugin` para:
-   - 📋 Copiar última coordenada para a área de transferência
-   - 📄 Exportar para CSV
-   - 🗂️ Exportar para Shapefile ou GeoPackage
-   - 🔁 Selecionar camada existente para adicionar os próximos pontos
+## Stored fields
 
-## 📂 Atributos salvos na camada
+| Field | Purpose |
+| --- | --- |
+| `id` | Sequential record identifier |
+| `lat` | WGS 84 latitude |
+| `lon` | WGS 84 longitude |
+| `epsg` | CRS used by the map canvas when the click occurred |
+| `source_layer` | First vector layer identified below the click |
+| `location` | Optional reverse-geocoded place name |
 
-| Campo         | Descrição                                             |
-|---------------|--------------------------------------------------------|
-| `id`          | ID incremental do ponto                                |
-| `lat`         | Latitude (graus decimais)                              |
-| `lon`         | Longitude (graus decimais)                             |
-| `epsg`        | Código EPSG do sistema de coordenadas do projeto       |
-| `source_layer`| Nome da camada clicada (se aplicável)                 |
+GeoPackage is recommended when long field names and Unicode text must be preserved without Shapefile limitations.
 
-## 💡 Sugestões futuras (contribuições bem-vindas)
+## Compatibility
 
-- Exportar como KML
-- Visualização estilo tabela com edição direta
-- Suporte a múltiplas capturas simultâneas
+- QGIS 3.28 or later
+- QGIS 4.x / Qt 6 metadata support
+- Windows, Linux and macOS
 
----
+## Privacy and network use
 
-Criado por: Jubilio Mausse  
-Licença: MIT  
-Compatível com: QGIS 3.x ou superior
+Coordinate capture and export work locally. When reverse geocoding is enabled, the clicked WGS 84 latitude and longitude are sent to the OpenStreetMap Nominatim service.
+
+## Development validation
+
+```bash
+python -m compileall qgis_latlon
+python -m unittest discover -s tests -v
+```
+
+## Licence
+
+MIT License. See [LICENSE](LICENSE).
