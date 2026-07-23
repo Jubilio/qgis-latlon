@@ -1,8 +1,8 @@
 [general]
 name=GeoClick Capture
 description=Log auditable map clicks with Qt 6 support and automatic snapping to line/polygon vertices and segments.
-about=GeoClick Capture is a lightweight capture-log tool for field verification, map review and GIS quality assurance. Version 1.2.1 supports QGIS 4 / Qt 6 and automatically attracts captures to nearby vertices or segments in visible line and polygon layers. A dock panel manages sessions, operator, category, status, notes and destination layers. Each click records UTC time, WGS 84 coordinates, original map coordinates, project information and source-feature context. Records can be reviewed, deleted, undone and exported to CSV, GeoJSON or GeoPackage. Optional reverse geocoding uses the QGIS network manager with caching, rate limiting, timeout and OpenStreetMap attribution. There are no external Python dependencies.
-version=1.2.1
+about=GeoClick Capture is a lightweight capture-log tool for field verification, map review and GIS quality assurance. Version 1.2.2 supports QGIS 4 / Qt 6 and automatically attracts captures to nearby vertices or segments in visible line and polygon layers. A dock panel manages sessions, operator, category, status, notes and destination layers. Each click records UTC time, WGS 84 coordinates, original map coordinates, project information and source-feature context. Records can be reviewed, deleted, undone and exported to CSV, GeoJSON or GeoPackage. Optional reverse geocoding uses the QGIS network manager with caching, rate limiting, timeout and OpenStreetMap attribution. There are no external Python dependencies.
+version=1.2.2
 qgisMinimumVersion=3.28
 qgisMaximumVersion=4.99
 author=Jubílio Maússe
@@ -14,7 +14,8 @@ license=MIT
 icon=icons/icon.svg
 category=Vector
 tags=coordinate capture,field verification,point logging,snapping,vertex,segment,quality assurance,audit trail,WGS84
-changelog=1.2.1 - Fixed QGIS 4 / Qt 6 dock enum compatibility and added automatic vertex-first/segment fallback snapping with configurable pixel tolerance and snapping audit fields.
+changelog=1.2.2 - Fixed the GitHub Actions Qt compatibility test so comments and documentation no longer trigger false failures; runtime Qt 5/Qt 6 compatibility and geometry snapping remain unchanged.
+    1.2.1 - Fixed QGIS 4 / Qt 6 dock enum compatibility and added automatic vertex-first/segment fallback snapping with configurable pixel tolerance and snapping audit fields.
     1.2.0 - Added Capture Log dock panel, capture sessions, operator/category/status/note fields, destination layer selector, table review, undo/delete/clear actions, persistent preferences, project and source-feature audit fields, GeoJSON export, geocoding cache, one-request-per-second rate limiting, timeout and OpenStreetMap attribution.
     1.1.0 - Repositioned the plugin as a lightweight point logger; added UTC timestamps, original map coordinates and project CRS fields; moved actions to the Vector menu; added submission-ready metadata, packaged licence, documentation and sample data.
     1.0.0 - Corrected CRS handling, layer writing, exports, Qt compatibility and asynchronous reverse geocoding.
