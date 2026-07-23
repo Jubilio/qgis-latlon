@@ -1,39 +1,46 @@
-"""Pure-Python helpers used by the QGIS LatLon plugin."""
+"""Pure utility functions for GeoClick Capture."""
 
 from __future__ import annotations
 
 import os
-from typing import Literal
-
-
-CoordinateType = Literal["lat", "lon"]
-
-
-def to_dms(value: float, coord_type: CoordinateType) -> str:
-    """Convert a decimal coordinate to degrees, minutes and seconds."""
-    if coord_type not in {"lat", "lon"}:
-        raise ValueError("coord_type must be 'lat' or 'lon'")
-
-    is_positive = value >= 0
-    absolute = abs(value)
-    degrees = int(absolute)
-    minutes_float = (absolute - degrees) * 60
-    minutes = int(minutes_float)
-    seconds = round((minutes_float - minutes) * 60, 2)
-
-    if seconds >= 60:
-        seconds = 0.0
-        minutes += 1
-    if minutes >= 60:
-        minutes = 0
-        degrees += 1
-
-    directions = {"lat": ("N", "S"), "lon": ("E", "W")}
-    suffix = directions[coord_type][0 if is_positive else 1]
-    return f"{degrees}°{minutes:02d}'{seconds:05.2f}\"{suffix}"
+import re
+import uuid
 
 
 def ensure_extension(path: str, extension: str) -> str:
-    """Append an extension when the chosen path has none."""
+    """Return *path* with the requested extension."""
     extension = extension if extension.startswith(".") else f".{extension}"
-    return path if os.path.splitext(path)[1] else f"{path}{extension}"
+    return path if path.lower().endswith(extension.lower()) else f"{path}{extension}"
+
+
+def to_dms(value: float, coordinate_type: str) -> str:
+    """Convert a decimal latitude or longitude to DMS notation."""
+    if coordinate_type not in {"lat", "lon"}:
+        raise ValueError("coordinate_type must be 'lat' or 'lon'")
+    absolute = abs(float(value))
+    degrees = int(absolute)
+    minutes_float = (absolute - degrees) * 60
+    minutes = int(minutes_float)
+    seconds = (minutes_float - minutes) * 60
+    directions = {"lat": ("N", "S"), "lon": ("E", "W")}
+    direction = directions[coordinate_type][0 if value >= 0 else 1]
+    return f'{degrees}°{minutes}\'{seconds:.2f}"{direction}'
+
+
+def normalise_session_id(value: str) -> str:
+    """Return a stable, field-friendly session identifier."""
+    cleaned = re.sub(r"[^A-Za-z0-9_-]+", "-", (value or "").strip()).strip("-")
+    return cleaned[:64] if cleaned else f"session-{uuid.uuid4().hex[:8]}"
+
+
+def geocode_cache_key(latitude: float, longitude: float, precision: int = 5) -> str:
+    """Create a deterministic cache key for a coordinate pair."""
+    return f"{float(latitude):.{precision}f},{float(longitude):.{precision}f}"
+
+
+def safe_project_name(file_name: str, fallback: str = "Untitled project") -> str:
+    """Extract a readable project name from a QGIS project path."""
+    if not file_name:
+        return fallback
+    name = os.path.basename(file_name)
+    return os.path.splitext(name)[0] or fallback
