@@ -22,11 +22,17 @@ class MetadataTests(unittest.TestCase):
     def test_version(self):
         self.assertEqual(self.general["version"], "1.2.5")
 
+    def test_packaged_version_is_synchronised(self):
+        version = (PLUGIN / "VERSION").read_text(encoding="utf-8").strip()
+        changelog = (PLUGIN / "CHANGELOG.md").read_text(encoding="utf-8")
+        self.assertEqual(version, self.general["version"])
+        self.assertIn(f"## {version}", changelog)
+
     def test_submission_files(self):
         for path in (
             "__init__.py", "metadata.txt", "LICENSE", "README.md",
-            "dock_widget.py", "plugin_v121.py", "plugin_v124.py",
-            "plugin_v125.py", "qgis_latlon.py",
+            "CHANGELOG.md", "VERSION", "dock_widget.py", "plugin_v121.py",
+            "plugin_v124.py", "plugin_v125.py", "qgis_latlon.py",
         ):
             self.assertTrue((PLUGIN / path).exists(), path)
 
