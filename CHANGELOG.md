@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.1.0 — 2026-07-23
+
+- Renamed the public plugin identity to **GeoClick Capture** to avoid confusion with broad coordinate-conversion suites.
+- Repositioned the tool around point logging for field verification and GIS quality assurance.
+- Added UTC capture timestamps.
+- Added original project X/Y coordinates and project CRS to each record.
+- Moved plugin actions to the QGIS **Vector** menu.
+- Added `license` and multiline `changelog` metadata.
+- Added the licence and README inside the installable plugin folder.
+- Added a minimal GeoJSON dataset for testing.
+- Updated the build artifact name and submission documentation.
+
 ## 1.0.0 — 2026-07-23
 
 - Fixed the invalid `QgsMapToolIdentify` import.
