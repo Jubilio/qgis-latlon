@@ -1,10 +1,11 @@
-"""QGIS LatLon plugin implementation."""
+"""GeoClick Capture plugin implementation."""
 
 from __future__ import annotations
 
 import csv
 import json
 import os
+from datetime import datetime, timezone
 from typing import Dict, List, Optional
 from urllib.parse import urlencode
 
@@ -32,20 +33,23 @@ from qgis.gui import QgsMapToolEmitPoint, QgsMapToolIdentify
 from .utils import ensure_extension, to_dms
 
 
-PLUGIN_MENU = "&QGIS LatLon"
+PLUGIN_MENU = "&GeoClick Capture"
 WGS84 = QgsCoordinateReferenceSystem("EPSG:4326")
 FIELD_DEFINITIONS = (
     ("id", QVariant.Int),
+    ("captured_at", QVariant.String),
     ("lat", QVariant.Double),
     ("lon", QVariant.Double),
-    ("epsg", QVariant.String),
+    ("map_x", QVariant.Double),
+    ("map_y", QVariant.Double),
+    ("project_crs", QVariant.String),
     ("source_layer", QVariant.String),
     ("location", QVariant.String),
 )
 
 
 class QgisLatLonPlugin:
-    """Capture map clicks and store their WGS84 coordinates."""
+    """Log map clicks as auditable point records."""
 
     def __init__(self, iface):
         self.iface = iface
@@ -67,40 +71,40 @@ class QgisLatLonPlugin:
         parent = self.iface.mainWindow()
 
         self.capture_action = QAction(
-            QIcon(icon_path), "Capturar coordenadas", parent
+            QIcon(icon_path), "Capture point", parent
         )
         self.capture_action.setCheckable(True)
-        self.capture_action.setToolTip("Clique no mapa para capturar coordenadas")
+        self.capture_action.setToolTip("Click the map to record a point")
         self.capture_action.triggered.connect(self.activate)
 
-        self.copy_action = QAction("Copiar última coordenada", parent)
+        self.copy_action = QAction("Copy last coordinate", parent)
         self.copy_action.triggered.connect(self.copy_to_clipboard)
 
-        self.export_csv_action = QAction("Exportar para CSV", parent)
+        self.export_csv_action = QAction("Export to CSV", parent)
         self.export_csv_action.triggered.connect(self.export_to_csv)
 
         self.export_vector_action = QAction(
-            "Exportar para GeoPackage/Shapefile", parent
+            "Export to GeoPackage/Shapefile", parent
         )
         self.export_vector_action.triggered.connect(self.export_to_vector_file)
 
         self.reuse_layer_action = QAction(
-            "Usar camada de pontos existente", parent
+            "Use existing point layer", parent
         )
         self.reuse_layer_action.triggered.connect(self.select_existing_layer)
 
         self.reverse_geocode_action = QAction(
-            "Activar geocodificação reversa (OpenStreetMap)", parent
+            "Enable reverse geocoding (OpenStreetMap)", parent
         )
         self.reverse_geocode_action.setCheckable(True)
         self.reverse_geocode_action.setChecked(False)
         self.reverse_geocode_action.setToolTip(
-            "Envia latitude e longitude ao serviço Nominatim para obter um nome de local"
+            "Sends WGS 84 coordinates to Nominatim to retrieve a place name"
         )
 
         self.iface.addToolBarIcon(self.capture_action)
         for action in self._menu_actions():
-            self.iface.addPluginToMenu(PLUGIN_MENU, action)
+            self.iface.addPluginToVectorMenu(PLUGIN_MENU, action)
 
     def unload(self):
         if self.tool is not None and self.canvas.mapTool() is self.tool:
@@ -108,7 +112,7 @@ class QgisLatLonPlugin:
         if self.capture_action is not None:
             self.iface.removeToolBarIcon(self.capture_action)
         for action in self._menu_actions():
-            self.iface.removePluginMenu(PLUGIN_MENU, action)
+            self.iface.removePluginVectorMenu(PLUGIN_MENU, action)
         self._pending_replies.clear()
 
     def _menu_actions(self) -> List[QAction]:
@@ -139,8 +143,8 @@ class QgisLatLonPlugin:
 
         self.canvas.setMapTool(self.tool)
         self.iface.messageBar().pushMessage(
-            "QGIS LatLon",
-            "Ferramenta activa: clique no mapa para capturar uma coordenada.",
+            "GeoClick Capture",
+            "Capture mode is active. Click the map to record a point.",
             level=Qgis.Info,
             duration=4,
         )
@@ -148,7 +152,7 @@ class QgisLatLonPlugin:
     def handle_map_click(self, map_point: QgsPointXY, _button):
         project_crs = self.canvas.mapSettings().destinationCrs()
         if not project_crs.isValid():
-            self._critical("O projecto não possui um sistema de coordenadas válido.")
+            self._critical("The project does not have a valid coordinate reference system.")
             return
 
         try:
@@ -156,8 +160,8 @@ class QgisLatLonPlugin:
                 project_crs, WGS84, QgsProject.instance()
             )
             wgs84_point = transform.transform(map_point)
-        except Exception as exc:
-            self._critical(f"Não foi possível transformar a coordenada: {exc}")
+        except Exception as exc:  # QgsCsException differs across QGIS versions
+            self._critical(f"The coordinate could not be transformed: {exc}")
             return
 
         lon = float(wgs84_point.x())
@@ -165,8 +169,11 @@ class QgisLatLonPlugin:
         source_layer = self._identify_source_layer(map_point)
         self.last_coords = (lat, lon)
 
+        captured_at = datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
         feature_id = self.add_point_to_layer(
+            map_point=map_point,
             wgs84_point=wgs84_point,
+            captured_at=captured_at,
             project_authid=project_crs.authid() or project_crs.description(),
             source_layer=source_layer,
             location="",
@@ -179,9 +186,9 @@ class QgisLatLonPlugin:
             f"{to_dms(lat, 'lat')}, {to_dms(lon, 'lon')}"
         )
         if source_layer:
-            message += f" | Camada: {source_layer}"
+            message += f" | Layer: {source_layer}"
         self.iface.messageBar().pushMessage(
-            "Coordenada capturada", message, level=Qgis.Success, duration=8
+            "Point captured", message, level=Qgis.Success, duration=8
         )
 
         if self.reverse_geocode_action and self.reverse_geocode_action.isChecked():
@@ -197,17 +204,27 @@ class QgisLatLonPlugin:
             return ""
 
         identify = QgsMapToolIdentify(self.canvas)
-        results = identify.identify(
-            QgsGeometry.fromPointXY(map_point),
-            QgsMapToolIdentify.TopDownStopAtFirst,
-            layers,
-            QgsMapToolIdentify.VectorLayer,
-        )
+        try:
+            results = identify.identify(
+                QgsGeometry.fromPointXY(map_point),
+                QgsMapToolIdentify.TopDownStopAtFirst,
+                layers,
+                QgsMapToolIdentify.VectorLayer,
+            )
+        except TypeError:
+            # Compatibility fallback for older QGIS 3 builds.
+            canvas_point = self.canvas.getCoordinateTransform().transform(map_point)
+            results = identify.identify(
+                int(canvas_point.x()),
+                int(canvas_point.y()),
+                layers,
+                QgsMapToolIdentify.TopDownStopAtFirst,
+            )
         return results[0].mLayer.name() if results else ""
 
     def create_memory_layer(self) -> QgsVectorLayer:
         layer = QgsVectorLayer(
-            "Point?crs=EPSG:4326", "Pontos Capturados", "memory"
+            "Point?crs=EPSG:4326", "Captured Points Log", "memory"
         )
         provider = layer.dataProvider()
         provider.addAttributes(
@@ -224,7 +241,7 @@ class QgisLatLonPlugin:
             return True
 
         if self.layer.geometryType() != QgsWkbTypes.PointGeometry:
-            self._critical("A camada seleccionada não é uma camada de pontos.")
+            self._critical("The selected layer is not a point layer.")
             return False
 
         existing_names = {field.name() for field in self.layer.fields()}
@@ -236,7 +253,7 @@ class QgisLatLonPlugin:
         if missing:
             if not self.layer.dataProvider().addAttributes(missing):
                 self._critical(
-                    "Não foi possível adicionar os campos necessários à camada seleccionada."
+                    "The required fields could not be added to the selected layer."
                 )
                 return False
             self.layer.updateFields()
@@ -244,7 +261,9 @@ class QgisLatLonPlugin:
 
     def add_point_to_layer(
         self,
+        map_point: QgsPointXY,
         wgs84_point: QgsPointXY,
+        captured_at: str,
         project_authid: str,
         source_layer: str,
         location: str,
@@ -260,16 +279,19 @@ class QgisLatLonPlugin:
                 )
                 layer_point = transform.transform(wgs84_point)
         except Exception as exc:
-            self._critical(f"Erro ao transformar o ponto para a camada: {exc}")
+            self._critical(f"The point could not be transformed to the layer CRS: {exc}")
             return None
 
         feature = QgsFeature(self.layer.fields())
         feature.setGeometry(QgsGeometry.fromPointXY(layer_point))
         values: Dict[str, object] = {
             "id": self.id_counter,
+            "captured_at": captured_at,
             "lat": float(wgs84_point.y()),
             "lon": float(wgs84_point.x()),
-            "epsg": project_authid,
+            "map_x": float(map_point.x()),
+            "map_y": float(map_point.y()),
+            "project_crs": project_authid,
             "source_layer": source_layer,
             "location": location,
         }
@@ -280,7 +302,7 @@ class QgisLatLonPlugin:
 
         success, added_features = self.layer.dataProvider().addFeatures([feature])
         if not success or not added_features:
-            self._critical("Não foi possível adicionar o ponto à camada seleccionada.")
+            self._critical("The point could not be added to the selected layer.")
             return None
 
         added_feature = added_features[0]
@@ -304,7 +326,7 @@ class QgisLatLonPlugin:
         )
         request.setRawHeader(
             b"User-Agent",
-            b"QGIS-LatLon/1.0 (+https://github.com/Jubilio/qgis-latlon)",
+            b"GeoClick-Capture/1.1 (+https://github.com/Jubilio/qgis-latlon)",
         )
         request.setRawHeader(b"Accept", b"application/json")
 
@@ -318,7 +340,7 @@ class QgisLatLonPlugin:
         try:
             if reply.error():
                 self.iface.messageBar().pushWarning(
-                    "QGIS LatLon", "A geocodificação reversa não ficou disponível."
+                    "GeoClick Capture", "Reverse geocoding is currently unavailable."
                 )
                 return
             payload = json.loads(bytes(reply.readAll()).decode("utf-8"))
@@ -332,14 +354,14 @@ class QgisLatLonPlugin:
                 )
                 self.layer.triggerRepaint()
                 self.iface.messageBar().pushMessage(
-                    "Local identificado",
+                    "Place identified",
                     location,
                     level=Qgis.Info,
                     duration=7,
                 )
         except (ValueError, UnicodeDecodeError, RuntimeError) as exc:
             self.iface.messageBar().pushWarning(
-                "QGIS LatLon", f"Resposta de geocodificação inválida: {exc}"
+                "GeoClick Capture", f"Invalid reverse-geocoding response: {exc}"
             )
         finally:
             if reply in self._pending_replies:
@@ -348,20 +370,20 @@ class QgisLatLonPlugin:
 
     def copy_to_clipboard(self):
         if self.last_coords is None:
-            self._warning("Nenhuma coordenada foi capturada ainda.")
+            self._warning("No coordinate has been captured yet.")
             return
         lat, lon = self.last_coords
         text = f"{lat:.6f}, {lon:.6f}"
         QGuiApplication.clipboard().setText(text)
         self.iface.messageBar().pushMessage(
-            "Copiado", text, level=Qgis.Success, duration=4
+            "Copied", text, level=Qgis.Success, duration=4
         )
 
     def export_to_csv(self):
         if not self._has_features():
             return
         path, _ = QFileDialog.getSaveFileName(
-            self.iface.mainWindow(), "Guardar como CSV", "", "CSV (*.csv)"
+            self.iface.mainWindow(), "Save as CSV", "", "CSV (*.csv)"
         )
         if not path:
             return
@@ -375,17 +397,17 @@ class QgisLatLonPlugin:
                 for feature in self.layer.getFeatures():
                     writer.writerow([feature[name] for name in field_names])
         except OSError as exc:
-            self._critical(f"Não foi possível guardar o CSV: {exc}")
+            self._critical(f"The CSV could not be saved: {exc}")
             return
 
-        self._success(f"CSV guardado em: {path}")
+        self._success(f"CSV saved to: {path}")
 
     def export_to_vector_file(self):
         if not self._has_features():
             return
         path, selected_filter = QFileDialog.getSaveFileName(
             self.iface.mainWindow(),
-            "Guardar camada",
+            "Save layer",
             "",
             "GeoPackage (*.gpkg);;Shapefile (*.shp)",
         )
@@ -409,9 +431,9 @@ class QgisLatLonPlugin:
         error_code = error[0] if isinstance(error, tuple) else error
         error_message = error[1] if isinstance(error, tuple) and len(error) > 1 else ""
         if error_code == QgsVectorFileWriter.NoError:
-            self._success(f"Camada guardada em: {path}")
+            self._success(f"Layer saved to: {path}")
         else:
-            self._critical(f"Erro ao exportar a camada: {error_message or error_code}")
+            self._critical(f"Layer export failed: {error_message or error_code}")
 
     def select_existing_layer(self):
         layers = [
@@ -422,14 +444,14 @@ class QgisLatLonPlugin:
             and layer.isValid()
         ]
         if not layers:
-            self._warning("Não existem camadas de pontos disponíveis no projecto.")
+            self._warning("There are no valid point layers in the project.")
             return
 
         labels = [f"{layer.name()} — {layer.crs().authid()}" for layer in layers]
         selected, ok = QInputDialog.getItem(
             self.iface.mainWindow(),
-            "Seleccionar camada",
-            "Camada onde os novos pontos serão adicionados:",
+            "Select layer",
+            "Layer where new points will be added:",
             labels,
             0,
             False,
@@ -450,21 +472,21 @@ class QgisLatLonPlugin:
                     except (TypeError, ValueError):
                         pass
         self.id_counter = max(existing_ids, default=0) + 1
-        self._success(f"Camada seleccionada: {self.layer.name()}")
+        self._success(f"Selected layer: {self.layer.name()}")
 
     def _has_features(self) -> bool:
         if self.layer is None or not self.layer.isValid() or self.layer.featureCount() == 0:
-            self._warning("Não existem pontos capturados para exportar.")
+            self._warning("There are no captured points to export.")
             return False
         return True
 
     def _success(self, message: str):
         self.iface.messageBar().pushMessage(
-            "QGIS LatLon", message, level=Qgis.Success, duration=6
+            "GeoClick Capture", message, level=Qgis.Success, duration=6
         )
 
     def _warning(self, message: str):
-        QMessageBox.warning(self.iface.mainWindow(), "QGIS LatLon", message)
+        QMessageBox.warning(self.iface.mainWindow(), "GeoClick Capture", message)
 
     def _critical(self, message: str):
-        QMessageBox.critical(self.iface.mainWindow(), "QGIS LatLon", message)
+        QMessageBox.critical(self.iface.mainWindow(), "GeoClick Capture", message)
