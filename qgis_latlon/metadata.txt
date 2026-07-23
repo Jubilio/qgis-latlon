@@ -1,8 +1,8 @@
 [general]
 name=GeoClick Capture
-description=Log map clicks to a point layer with WGS 84 and project coordinates, timestamps and optional reverse geocoding.
-about=GeoClick Capture is a lightweight point-logging tool for field verification, map review and quality assurance. Each click creates an auditable record containing UTC capture time, WGS 84 latitude/longitude, original project coordinates, project CRS, the first vector layer below the click and an optional OpenStreetMap place name. Capture and export work locally. Reverse geocoding is disabled by default and uses the QGIS network manager; there are no external Python dependencies.
-version=1.1.0
+description=Log and classify map clicks in an auditable point layer with sessions, timestamps, WGS 84 and project coordinates.
+about=GeoClick Capture is a lightweight capture-log tool for field verification, map review and GIS quality assurance. A dock panel manages sessions, operator, category, status, notes and destination layers. Each click records UTC time, WGS 84 coordinates, original map coordinates, project information and source-feature context. Records can be reviewed, deleted, undone and exported to CSV, GeoJSON or GeoPackage. Optional reverse geocoding uses the QGIS network manager with caching, rate limiting, timeout and OpenStreetMap attribution. There are no external Python dependencies.
+version=1.2.0
 qgisMinimumVersion=3.28
 qgisMaximumVersion=4.99
 author=Jubílio Maússe
@@ -13,8 +13,9 @@ tracker=https://github.com/Jubilio/qgis-latlon/issues
 license=MIT
 icon=icons/icon.svg
 category=Vector
-tags=coordinate capture,field data,point logging,digitizing,WGS84,reverse geocoding,quality assurance
-changelog=1.1.0 - Repositioned the plugin as a lightweight point logger; added UTC timestamps, original map coordinates and project CRS fields; moved actions to the Vector menu; added submission-ready metadata, packaged licence, documentation and sample data.
+tags=coordinate capture,field verification,point logging,quality assurance,audit trail,digitizing,WGS84,reverse geocoding
+changelog=1.2.0 - Added Capture Log dock panel, capture sessions, operator/category/status/note fields, destination layer selector, table review, undo/delete/clear actions, persistent preferences, project and source-feature audit fields, GeoJSON export, geocoding cache, one-request-per-second rate limiting, timeout and OpenStreetMap attribution.
+    1.1.0 - Repositioned the plugin as a lightweight point logger; added UTC timestamps, original map coordinates and project CRS fields; moved actions to the Vector menu; added submission-ready metadata, packaged licence, documentation and sample data.
     1.0.0 - Corrected CRS handling, layer writing, exports, Qt compatibility and asynchronous reverse geocoding.
 experimental=False
 deprecated=False

@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.2.0 — 2026-07-23
+
+- Added the dockable Capture Log panel.
+- Added sessions, operator, category, status and notes.
+- Added a QGIS point-layer selector and record table.
+- Added undo, delete-selected and clear-session actions.
+- Added persistent user preferences.
+- Added project name, map scale and source feature identifiers.
+- Added GeoJSON export.
+- Added reverse-geocoding cache, rate limiting, timeout and attribution.
+- Expanded metadata and utility tests.
+
 ## 1.1.0 — 2026-07-23
 
 - Renamed the public plugin identity to **GeoClick Capture** to avoid confusion with broad coordinate-conversion suites.
