@@ -1,0 +1,26 @@
+name: Plugin checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile plugin
+        run: python -m compileall -q qgis_latlon
+      - name: Run unit tests
+        run: python -m unittest discover -s tests -v
+      - name: Build installable ZIP
+        run: zip -qr qgis_latlon-1.0.0.zip qgis_latlon
+      - uses: actions/upload-artifact@v4
+        with:
+          name: qgis_latlon-1.0.0
+          path: qgis_latlon-1.0.0.zip
