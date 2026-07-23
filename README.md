@@ -1,32 +1,25 @@
 # GeoClick Capture
 
-**GeoClick Capture** is a focused QGIS plugin for building auditable point logs during field verification, map review and GIS quality-assurance work.
+**GeoClick Capture** is a QGIS plugin for creating auditable point logs during field verification, map review and GIS quality-assurance work.
 
-## Version 1.2.0
+## Version 1.2.1
 
-The plugin now includes a dockable **Capture Log** panel with:
+This version fixes loading under **QGIS 4 / Qt 6** and adds automatic geometry snapping:
 
-- capture sessions and operator details;
-- category, verification status and notes;
-- QGIS point-layer selector;
-- table of captured records;
-- undo, delete-selected and clear-session actions;
-- persistent user preferences;
-- CSV, GeoJSON and GeoPackage exports.
+- project snapping is used first;
+- if no project match is found, visible line and polygon layers are searched;
+- nearby vertices are preferred;
+- the closest segment is used when no vertex is within tolerance;
+- snap tolerance is configurable in screen pixels;
+- `snapped`, `snap_type` and `snap_distance` are stored in the output layer.
 
-Every point records UTC capture time, WGS 84 coordinates, original project coordinates, project name, project CRS, map scale and source-feature context. Optional reverse geocoding is disabled by default and uses `QgsNetworkAccessManager` with caching, a one-request-per-second limit, timeout and OpenStreetMap attribution.
+The Capture Log panel also includes sessions, operator/category/status/notes, point-layer selection, undo/delete/clear actions and CSV, GeoJSON and GeoPackage exports.
 
 ## Installation
 
-Download `geoclick_capture-1.2.0.zip`, then open **QGIS → Plugins → Manage and Install Plugins → Install from ZIP**.
+Download `geoclick_capture-1.2.1.zip`, then open **QGIS → Plugins → Manage and Install Plugins → Install from ZIP**.
 
-## Usage
-
-1. Open **Vector → GeoClick Capture → Open capture log**.
-2. Define the session, operator, category, status and optional note.
-3. Select an existing point layer or leave the destination empty to create **Captured Points Log**.
-4. Click **Start capture** and click positions on the map.
-5. Review, delete, undo or export records from the panel.
+After replacing version 1.2.0, restart QGIS or reload the plugin.
 
 ## Development
 
