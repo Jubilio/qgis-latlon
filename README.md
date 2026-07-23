@@ -2,11 +2,11 @@
 
 **GeoClick Capture** is a QGIS plugin for creating auditable point logs during field verification, map review and GIS quality-assurance work.
 
-## Version 1.2.4
+## Version 1.2.5
 
-This release strengthens optional reverse geocoding. Requests now use safe HTTPS redirect handling, an explicit transfer timeout, a valid application User-Agent, one retry for transient failures and detailed HTTP, SSL/TLS and network diagnostics in the QGIS log.
+This release treats Nominatim's `Unable to geocode` response as a valid no-result condition instead of a network failure. When no detailed address is available, the plugin progressively searches broader OpenStreetMap address levels: settlement, city, state/province and country.
 
-The plugin distinguishes provider rejection, rate limiting, network failure and coordinates for which no address exists. The point itself is still captured when the external geocoding service is unavailable.
+If OpenStreetMap still has no suitable object near the coordinate, the point remains saved and the plugin explains that no address or administrative area was found.
 
 Automatic geometry snapping remains active:
 
@@ -21,7 +21,7 @@ The Capture Log panel also includes sessions, operator/category/status/notes, po
 
 ## Installation
 
-Download `geoclick_capture-1.2.4.zip`, then open **QGIS → Plugins → Manage and Install Plugins → Install from ZIP**.
+Download `geoclick_capture-1.2.5.zip`, then open **QGIS → Plugins → Manage and Install Plugins → Install from ZIP**.
 
 After replacing an older version, restart QGIS or reload the plugin.
 

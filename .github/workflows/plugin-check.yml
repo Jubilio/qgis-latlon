@@ -28,6 +28,7 @@ jobs:
           test -f qgis_latlon/dock_widget.py
           test -f qgis_latlon/plugin_v121.py
           test -f qgis_latlon/plugin_v124.py
+          test -f qgis_latlon/plugin_v125.py
           test -f qgis_latlon/qgis_latlon.py
           if git ls-files | grep -Eq '(^|/)__pycache__/|\.pyc$'; then
             echo "::error::Python cache files are tracked in the repository"
@@ -35,8 +36,8 @@ jobs:
             exit 1
           fi
       - name: Build installable ZIP
-        run: zip -qr geoclick_capture-1.2.4.zip qgis_latlon -x '*/__pycache__/*' '*.pyc'
+        run: zip -qr geoclick_capture-1.2.5.zip qgis_latlon -x '*/__pycache__/*' '*.pyc'
       - uses: actions/upload-artifact@v4
         with:
-          name: geoclick_capture-1.2.4
-          path: geoclick_capture-1.2.4.zip
+          name: geoclick_capture-1.2.5
+          path: geoclick_capture-1.2.5.zip

@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.2.5 — 2026-07-23
+
+- Treats Nominatim's `Unable to geocode` response as a valid no-result condition.
+- Adds progressive fallback from detailed address to settlement, city, state/province and country levels.
+- Adds `layer=address` and an identifying email parameter to reverse requests.
+- Preserves one-request-per-second spacing between fallback requests.
+- Stores broader successful results as approximate place names.
+- Keeps the point saved without a place name when OpenStreetMap has no suitable object.
+
 ## 1.2.4 — 2026-07-23
 
 - Added safe HTTPS redirect handling to reverse-geocoding requests.
@@ -51,7 +60,7 @@
 
 - Renamed the public plugin identity to **GeoClick Capture**.
 - Repositioned the tool around point logging for field verification and GIS quality assurance.
-- Added UTC capture timestamps and original project coordinates.
+- Added UTC capture timestamps and original map coordinates.
 - Added submission-ready metadata, packaged licence, documentation and sample data.
 
 ## 1.0.0 — 2026-07-23
