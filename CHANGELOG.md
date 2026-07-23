@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.2.3 — 2026-07-23
+
+- Replaced all 12 unscoped Qt 5/QGIS enum accesses reported by the QGIS Qt 6 validator.
+- Added scoped enum resolution for dock areas, message levels, identify modes, identify types, geometry types, standard buttons and writer errors.
+- Preserved QGIS 3 / PyQt 5 support through runtime fallbacks.
+- Expanded AST tests to scan the complete plugin package for the reported legacy enum accesses.
+- Updated metadata, documentation and the installable ZIP version.
+
 ## 1.2.2 — 2026-07-23
 
 - Fixed a false failure in the GitHub Actions Qt compatibility test.
