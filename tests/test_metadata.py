@@ -20,7 +20,7 @@ class MetadataTests(unittest.TestCase):
             self.assertTrue(self.general.get(key))
 
     def test_version(self):
-        self.assertEqual(self.general["version"], "1.2.1")
+        self.assertEqual(self.general["version"], "1.2.2")
 
     def test_submission_files(self):
         for path in (
