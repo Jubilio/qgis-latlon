@@ -2,6 +2,6 @@
 
 
 def classFactory(iface):
-    from .qgis_latlon import QgisLatLonPlugin
+    from .plugin_v121 import GeoClickCapturePlugin
 
-    return QgisLatLonPlugin(iface)
+    return GeoClickCapturePlugin(iface)

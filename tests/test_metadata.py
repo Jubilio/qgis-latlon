@@ -13,14 +13,20 @@ class MetadataTests(unittest.TestCase):
         self.general = self.parser["general"]
 
     def test_required_metadata(self):
-        for key in ("name", "description", "version", "author", "homepage", "repository", "tracker", "license"):
+        for key in (
+            "name", "description", "version", "author", "homepage",
+            "repository", "tracker", "license",
+        ):
             self.assertTrue(self.general.get(key))
 
     def test_version(self):
-        self.assertEqual(self.general["version"], "1.2.0")
+        self.assertEqual(self.general["version"], "1.2.1")
 
     def test_submission_files(self):
-        for path in ("__init__.py", "metadata.txt", "LICENSE", "README.md", "dock_widget.py"):
+        for path in (
+            "__init__.py", "metadata.txt", "LICENSE", "README.md",
+            "dock_widget.py", "plugin_v121.py",
+        ):
             self.assertTrue((PLUGIN / path).exists(), path)
 
     def test_no_external_dependency_declared(self):
