@@ -2,22 +2,13 @@
 
 **GeoClick Capture** builds auditable point logs for field verification, map review and GIS quality assurance.
 
-## Version 1.2.4
+## Version 1.2.5
 
-This release strengthens optional reverse geocoding:
+Reverse geocoding now treats `Unable to geocode` as a valid no-result response rather than a connection failure. The plugin first requests a detailed address and then tries broader OpenStreetMap levels: settlement, city, state or province, and country.
 
-- follows only safe HTTPS redirects;
-- sets a 20-second request timeout;
-- identifies the plugin with a valid application User-Agent;
-- records HTTP, SSL/TLS and network diagnostics in the QGIS log;
-- retries once for temporary network failures and HTTP 429/5xx responses;
-- distinguishes provider rejection, rate limiting and coordinates with no address result.
+If a broader result is found, it is stored as an approximate place name. When OpenStreetMap has no suitable address or administrative object, the point remains saved without a place name and a clear message is shown.
 
-Captured points are still saved even when the external geocoding service is unavailable.
-
-This maintenance release scopes every Qt/QGIS enum reported by the QGIS Qt 6 validator in the base implementation. It covers dock placement, geometry types, message levels, identify modes, message-box buttons and vector-writer errors, while preserving PyQt 5 fallbacks for QGIS 3.
-
-The QGIS 4 / Qt 6 correction and automatic snapping introduced in version 1.2.1 remain active. The plugin first respects the QGIS project snapping configuration. When no project match is returned, it searches visible line and polygon layers, preferring the nearest vertex and falling back to the nearest segment within a configurable pixel tolerance.
+The QGIS 4 / Qt 6 correction and automatic snapping remain active. The plugin respects project snapping first, then searches visible line and polygon layers, preferring the nearest vertex and falling back to the nearest segment within the configured pixel tolerance.
 
 The **Capture Log** panel provides:
 
@@ -33,7 +24,7 @@ Captured records include UTC time, WGS 84 coordinates, project coordinates, proj
 ## Installation
 
 1. Open **QGIS → Plugins → Manage and Install Plugins → Install from ZIP**.
-2. Select `geoclick_capture-1.2.4.zip`.
+2. Select `geoclick_capture-1.2.5.zip`.
 3. Restart or reload the plugin after replacing an older installation.
 
 ## Usage
