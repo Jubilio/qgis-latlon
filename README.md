@@ -2,11 +2,11 @@
 
 **GeoClick Capture** is a QGIS plugin for creating auditable point logs during field verification, map review and GIS quality-assurance work.
 
-## Version 1.2.2
+## Version 1.2.3
 
-This maintenance release corrects the automated Qt compatibility test. Version 1.2.1 already removed executable use of the Qt 5-only dock-area aliases, but the previous test also searched comments and therefore produced a false failure in GitHub Actions.
+This release fixes all 12 Qt 6 compatibility warnings reported against the base implementation. The code now resolves scoped QGIS 4 / PyQt 6 enums for dock placement, message levels, identify modes, geometry types, message-box buttons and vector-writer errors, with PyQt 5 fallbacks for QGIS 3.
 
-The test now parses the Python source and inspects executable attribute access only. QGIS 4 / Qt 6 compatibility and automatic geometry snapping remain unchanged:
+Automatic geometry snapping remains active:
 
 - project snapping is used first;
 - if no project match is found, visible line and polygon layers are searched;
@@ -19,7 +19,7 @@ The Capture Log panel also includes sessions, operator/category/status/notes, po
 
 ## Installation
 
-Download `geoclick_capture-1.2.2.zip`, then open **QGIS → Plugins → Manage and Install Plugins → Install from ZIP**.
+Download `geoclick_capture-1.2.3.zip`, then open **QGIS → Plugins → Manage and Install Plugins → Install from ZIP**.
 
 After replacing an older version, restart QGIS or reload the plugin.
 

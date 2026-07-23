@@ -20,12 +20,12 @@ class MetadataTests(unittest.TestCase):
             self.assertTrue(self.general.get(key))
 
     def test_version(self):
-        self.assertEqual(self.general["version"], "1.2.2")
+        self.assertEqual(self.general["version"], "1.2.3")
 
     def test_submission_files(self):
         for path in (
             "__init__.py", "metadata.txt", "LICENSE", "README.md",
-            "dock_widget.py", "plugin_v121.py",
+            "dock_widget.py", "plugin_v121.py", "qgis_latlon.py",
         ):
             self.assertTrue((PLUGIN / path).exists(), path)
 
