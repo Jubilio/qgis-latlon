@@ -1,0 +1,79 @@
+name: Publish release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out tagged source
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate tag and plugin version
+        id: version
+        shell: bash
+        run: |
+          set -euo pipefail
+          plugin_version="$(tr -d '[:space:]' < qgis_latlon/VERSION)"
+          tag_version="${GITHUB_REF_NAME#v}"
+
+          if [[ "$plugin_version" != "$tag_version" ]]; then
+            echo "Plugin VERSION ($plugin_version) does not match tag ($GITHUB_REF_NAME)." >&2
+            exit 1
+          fi
+
+          metadata_version="$(python - <<'PY'
+          import configparser
+          parser = configparser.ConfigParser()
+          parser.read('qgis_latlon/metadata.txt', encoding='utf-8')
+          print(parser['general']['version'])
+          PY
+          )"
+
+          if [[ "$metadata_version" != "$plugin_version" ]]; then
+            echo "metadata.txt version ($metadata_version) does not match VERSION ($plugin_version)." >&2
+            exit 1
+          fi
+
+          echo "version=$plugin_version" >> "$GITHUB_OUTPUT"
+
+      - name: Compile plugin
+        run: python -m compileall -q qgis_latlon
+
+      - name: Run unit tests
+        run: python -m unittest discover -s tests -v
+
+      - name: Build installable ZIP
+        shell: bash
+        run: |
+          set -euo pipefail
+          zip -qr "geoclick_capture-${{ steps.version.outputs.version }}.zip" qgis_latlon \
+            -x '*/__pycache__/*' '*.pyc'
+
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          notes_file=".github/release-notes/${GITHUB_REF_NAME}.md"
+          if [[ ! -f "$notes_file" ]]; then
+            notes_file="qgis_latlon/CHANGELOG.md"
+          fi
+
+          gh release create "$GITHUB_REF_NAME" \
+            "geoclick_capture-${{ steps.version.outputs.version }}.zip" \
+            --title "GeoClick Capture ${{ steps.version.outputs.version }}" \
+            --notes-file "$notes_file" \
+            --verify-tag
