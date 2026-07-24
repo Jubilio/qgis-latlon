@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.2.6 — 2026-07-24
+
+- Added eight coordinated transparent SVG icons for capture, capture log, snapping, reverse geocoding, export, undo, deletion and sessions.
+- Assigned icons to all plugin menu actions and the main Capture Log controls.
+- Added a snapping icon beside the snapping control and a session icon to the dock window.
+- Changed the plugin repository icon to the new capture-point artwork.
+- Optimised every icon to a 64 × 64 viewBox and kept the combined icon payload below 20 KB.
+
 ## 1.2.5 — 2026-07-23
 
 - Treats Nominatim's `Unable to geocode` response as a valid no-result condition.

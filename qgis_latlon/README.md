@@ -2,13 +2,13 @@
 
 **GeoClick Capture** builds auditable point logs for field verification, map review and GIS quality assurance.
 
-## Version 1.2.5
+## Version 1.2.6
 
-Reverse geocoding now treats `Unable to geocode` as a valid no-result response rather than a connection failure. The plugin first requests a detailed address and then tries broader OpenStreetMap levels: settlement, city, state or province, and country.
+This release adds a coordinated visual icon set for the plugin's principal functions. Capture, capture log, snapping, reverse geocoding, export, undo, deletion and session management now use distinct dark-teal and orange SVG icons with transparent backgrounds.
 
-If a broader result is found, it is stored as an approximate place name. When OpenStreetMap has no suitable address or administrative object, the point remains saved without a place name and a clear message is shown.
+Menu actions and the Capture Log panel expose these icons consistently, making frequently used operations easier to identify at a glance. The plugin icon shown by QGIS also uses the new capture-point artwork.
 
-The QGIS 4 / Qt 6 correction and automatic snapping remain active. The plugin respects project snapping first, then searches visible line and polygon layers, preferring the nearest vertex and falling back to the nearest segment within the configured pixel tolerance.
+Reverse-geocoding fallback, QGIS 4 / Qt 6 compatibility and automatic geometry snapping remain unchanged.
 
 The **Capture Log** panel provides:
 
@@ -24,7 +24,7 @@ Captured records include UTC time, WGS 84 coordinates, project coordinates, proj
 ## Installation
 
 1. Open **QGIS → Plugins → Manage and Install Plugins → Install from ZIP**.
-2. Select `geoclick_capture-1.2.5.zip`.
+2. Select `geoclick_capture-1.2.6.zip`.
 3. Restart or reload the plugin after replacing an older installation.
 
 ## Usage
