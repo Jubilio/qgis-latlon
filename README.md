@@ -2,26 +2,21 @@
 
 **GeoClick Capture** is a QGIS plugin for creating auditable point logs during field verification, map review and GIS quality-assurance work.
 
-## Version 1.2.5
+## Version 1.2.6
 
-This release treats Nominatim's `Unable to geocode` response as a valid no-result condition instead of a network failure. When no detailed address is available, the plugin progressively searches broader OpenStreetMap address levels: settlement, city, state/province and country.
+This release introduces a coordinated set of transparent toolbar and panel icons for capture, capture log, snapping, reverse geocoding, export, undo, deletion and session management. The new artwork is optimised for QGIS toolbar sizes and is used consistently in the Vector menu and Capture Log dock.
 
-If OpenStreetMap still has no suitable object near the coordinate, the point remains saved and the plugin explains that no address or administrative area was found.
+Existing capabilities remain active:
 
-Automatic geometry snapping remains active:
-
-- project snapping is used first;
-- if no project match is found, visible line and polygon layers are searched;
-- nearby vertices are preferred;
-- the closest segment is used when no vertex is within tolerance;
-- snap tolerance is configurable in screen pixels;
-- `snapped`, `snap_type` and `snap_distance` are stored in the output layer.
-
-The Capture Log panel also includes sessions, operator/category/status/notes, point-layer selection, undo/delete/clear actions and CSV, GeoJSON and GeoPackage exports.
+- project snapping with vertex-first and segment fallback;
+- session, operator, category, status and note fields;
+- CSV, GeoJSON and GeoPackage export;
+- reverse-geocoding fallback from detailed address to broader administrative levels;
+- QGIS 3.28+ and QGIS 4 / Qt 6 compatibility.
 
 ## Installation
 
-Download `geoclick_capture-1.2.5.zip`, then open **QGIS → Plugins → Manage and Install Plugins → Install from ZIP**.
+Download `geoclick_capture-1.2.6.zip`, then open **QGIS → Plugins → Manage and Install Plugins → Install from ZIP**.
 
 After replacing an older version, restart QGIS or reload the plugin.
 
