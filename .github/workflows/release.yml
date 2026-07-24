@@ -2,8 +2,12 @@ name: Publish release
 
 on:
   push:
+    branches:
+      - main
     tags:
       - "v*"
+    paths:
+      - ".github/RELEASE_VERSION"
 
 permissions:
   contents: write
@@ -12,27 +16,22 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out tagged source
+      - name: Check out release source
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      - name: Validate tag and plugin version
+      - name: Resolve and validate release version
         id: version
         shell: bash
         run: |
           set -euo pipefail
           plugin_version="$(tr -d '[:space:]' < qgis_latlon/VERSION)"
-          tag_version="${GITHUB_REF_NAME#v}"
-
-          if [[ "$plugin_version" != "$tag_version" ]]; then
-            echo "Plugin VERSION ($plugin_version) does not match tag ($GITHUB_REF_NAME)." >&2
-            exit 1
-          fi
-
           metadata_version="$(python - <<'PY'
           import configparser
           parser = configparser.ConfigParser()
@@ -41,12 +40,24 @@ jobs:
           PY
           )"
 
+          if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
+            requested_version="${GITHUB_REF_NAME#v}"
+          else
+            requested_version="$(tr -d '[:space:]' < .github/RELEASE_VERSION)"
+          fi
+
+          if [[ "$requested_version" != "$plugin_version" ]]; then
+            echo "Requested release ($requested_version) does not match plugin VERSION ($plugin_version)." >&2
+            exit 1
+          fi
+
           if [[ "$metadata_version" != "$plugin_version" ]]; then
             echo "metadata.txt version ($metadata_version) does not match VERSION ($plugin_version)." >&2
             exit 1
           fi
 
           echo "version=$plugin_version" >> "$GITHUB_OUTPUT"
+          echo "tag=v$plugin_version" >> "$GITHUB_OUTPUT"
 
       - name: Compile plugin
         run: python -m compileall -q qgis_latlon
@@ -61,19 +72,41 @@ jobs:
           zip -qr "geoclick_capture-${{ steps.version.outputs.version }}.zip" qgis_latlon \
             -x '*/__pycache__/*' '*.pyc'
 
-      - name: Publish GitHub release
+      - name: Create release tag when requested from main
+        if: github.ref_type != 'tag'
         env:
-          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
         shell: bash
         run: |
           set -euo pipefail
-          notes_file=".github/release-notes/${GITHUB_REF_NAME}.md"
+          if git ls-remote --exit-code --tags origin "refs/tags/$TAG" >/dev/null 2>&1; then
+            echo "Tag $TAG already exists; using the existing tag."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git tag -a "$TAG" -m "GeoClick Capture ${TAG#v}"
+            git push origin "$TAG"
+          fi
+
+      - name: Publish or update GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+          VERSION: ${{ steps.version.outputs.version }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          notes_file=".github/release-notes/${TAG}.md"
           if [[ ! -f "$notes_file" ]]; then
             notes_file="qgis_latlon/CHANGELOG.md"
           fi
 
-          gh release create "$GITHUB_REF_NAME" \
-            "geoclick_capture-${{ steps.version.outputs.version }}.zip" \
-            --title "GeoClick Capture ${{ steps.version.outputs.version }}" \
-            --notes-file "$notes_file" \
-            --verify-tag
+          asset="geoclick_capture-${VERSION}.zip"
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" "$asset" --clobber
+          else
+            gh release create "$TAG" "$asset" \
+              --title "GeoClick Capture $VERSION" \
+              --notes-file "$notes_file" \
+              --verify-tag
+          fi
