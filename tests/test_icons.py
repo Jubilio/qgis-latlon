@@ -13,7 +13,9 @@ ICONS = (
     "match_verify.svg", "scan_candidates.svg", "zoom_existing.svg",
     "use_existing.svg", "create_new.svg", "duplicate_warning.svg",
     "gazetteer.svg", "load_gazetteer.svg", "offline_search.svg",
-    "gazetteer_capture.svg",
+    "gazetteer_capture.svg", "review_queue.svg", "review_approve.svg",
+    "review_reject.svg", "review_changes.svg", "review_history.svg",
+    "review_export.svg",
 )
 
 
@@ -34,6 +36,8 @@ class IconTests(unittest.TestCase):
         match_dock = (PLUGIN / "dock_widget_v140.py").read_text(encoding="utf-8")
         gazetteer_source = (PLUGIN / "plugin_v150.py").read_text(encoding="utf-8")
         gazetteer_dock = (PLUGIN / "dock_widget_v150.py").read_text(encoding="utf-8")
+        review_source = (PLUGIN / "plugin_v160.py").read_text(encoding="utf-8")
+        review_dock = (PLUGIN / "dock_widget_v160.py").read_text(encoding="utf-8")
         for name in ("search_place.svg", "capture_point.svg"):
             self.assertIn(name, search_source + search_dock)
         for name in (
@@ -51,6 +55,11 @@ class IconTests(unittest.TestCase):
             "gazetteer_capture.svg",
         ):
             self.assertIn(name, gazetteer_source + gazetteer_dock)
+        for name in (
+            "review_queue.svg", "review_approve.svg", "review_reject.svg",
+            "review_changes.svg", "review_history.svg", "review_export.svg",
+        ):
+            self.assertIn(name, review_source + review_dock)
 
 
 if __name__ == "__main__":

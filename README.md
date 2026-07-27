@@ -1,21 +1,28 @@
 # GeoClick Capture
 
-**GeoClick Capture** is a QGIS plugin for finding, matching, verifying and recording auditable place locations during field verification, map review and GIS quality-assurance work.
+**GeoClick Capture** is a QGIS plugin for finding, matching, verifying, reviewing and recording auditable place locations during field verification, map review and GIS quality-assurance work.
 
-## Version 1.5.0 — Offline Gazetteer
+## Version 1.6.0 — Review Workflow
 
-Version 1.5.0 adds a fourth **Offline Gazetteer** tab for institutional and project-specific place lists.
+Version 1.6.0 adds a fifth **Review Queue** tab for formal quality-control decisions after capture.
 
-The gazetteer can use:
+The review workspace provides:
 
-- UTF-8 or UTF-8-BOM CSV files;
-- any point layer already open in QGIS, including GeoPackage and database-backed layers.
+- filters for Pending, Needs changes, Approved and Rejected records;
+- free-text search across IDs, places, methods, duplicate risk, reviewer and comments;
+- multi-record **Approve**, **Reject**, **Needs changes** and **Reset pending** actions;
+- required reviewer attribution for every decision;
+- required comments for rejection and change requests;
+- immutable JSON history with iteration, action, state, reviewer, UTC timestamp and comment;
+- one-record history display and filtered review CSV export.
 
-The plugin automatically detects common fields for official names, aliases, P-codes, coordinates, place types, administrative names, source and source date. Searches run locally across official names, alternative spellings and P-codes and can be filtered by place type.
+Review decisions synchronise `review_required` and the existing operational `status` field. The following audit fields are added automatically:
 
-Offline results can be previewed, zoomed to, passed to **Match & Verify**, or added directly to the active capture session. Source, record ID, P-code, name, aliases, place type, administrative hierarchy and source date are preserved in audit fields.
+`review_status`, `reviewer`, `reviewed_at`, `review_comment`, `review_history`, `review_iteration`.
 
-A compatible template is packaged at:
+## Offline Gazetteer
+
+Version 1.5.0 loads UTF-8 CSV files or any point layer already open in QGIS, including GeoPackage and database-backed layers. It searches official names, aliases and P-codes without Internet access and preserves source metadata. A compatible template is packaged at:
 
 `qgis_latlon/samples/offline_gazetteer_template.csv`
 
@@ -25,14 +32,7 @@ Version 1.4.0 compares searched or offline places with one point layer or all vi
 
 ## Search & Capture
 
-Supported online/direct inputs include:
-
-- place names and addresses through OpenStreetMap Nominatim;
-- decimal coordinates such as `-12.9742, 40.5178`;
-- OpenStreetMap URLs;
-- Google Maps URLs containing coordinates.
-
-Search results can be reviewed, zoomed, previewed, copied, opened in external maps, matched against existing layers or added directly to the active session.
+Supported inputs include place names and addresses through OpenStreetMap Nominatim, decimal coordinates, OpenStreetMap URLs and Google Maps URLs containing coordinates. Results can be reviewed, zoomed, previewed, copied, matched or added directly to the session.
 
 ## Existing capabilities
 
@@ -51,18 +51,20 @@ Open:
 
 **QGIS → Plugins → Manage and Install Plugins → Install from ZIP**
 
-Select `geoclick_capture-1.5.0.zip` or the Pull Request test artefact, then restart QGIS or reload the plugin.
+Select `geoclick_capture-1.6.0.zip` or the Pull Request test artefact, then restart QGIS or reload the plugin.
 
-## Offline Gazetteer workflow
+## Review workflow
 
-1. Open **Vector → GeoClick Capture → Open offline gazetteer**.
-2. Load a CSV or select a QGIS point layer.
-3. Search an official name, alternative spelling or P-code.
-4. Review the result and use **Preview** or **Zoom**.
-5. Select **Match & verify** or **Add to session**.
-6. Review the gazetteer source fields in the Capture Log attributes.
+1. Open **Vector → GeoClick Capture → Open review queue**.
+2. Select the destination layer containing captured records.
+3. Filter the queue by state or search text.
+4. Enter the reviewer name and, where required, a comment.
+5. Select one or several records.
+6. Choose **Approve**, **Reject**, **Needs changes** or **Reset pending**.
+7. Use **History** to inspect one record's complete audit trail.
+8. Use **Export review CSV** to export the currently filtered queue.
 
-Text searches through Nominatim require Internet access. Offline gazetteer, coordinate and supported URL inputs do not.
+Text searches through Nominatim require Internet access. Review Workflow, Offline Gazetteer, coordinate inputs and supported URL parsing work locally.
 
 ## Development
 
