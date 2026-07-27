@@ -1,8 +1,8 @@
 [general]
 name=GeoClick Capture
-description=Find, match, verify and capture online or offline places as auditable QGIS point records.
-about=GeoClick Capture is a lightweight location-verification and capture-log tool for field verification, map review and GIS quality assurance. Version 1.5.0 adds an Offline Gazetteer tab that loads UTF-8 CSV files or uses any point layer already open in QGIS, including GeoPackage and database layers. The plugin automatically detects common fields for official names, aliases, P-codes, coordinates, place types and administrative names; searches them locally without Internet access; and can preview, zoom, match or add a selected record to the active capture session. Gazetteer source, record ID, P-code, official name, aliases, type, administrative hierarchy and source date are retained as audit fields. Version 1.4.0 provides Match & Verify with nearby-feature scanning, geodesic distance, name similarity, confidence scoring and duplicate-risk classification. Version 1.3.0 provides Nominatim place search, direct coordinates and supported OpenStreetMap/Google Maps URLs. Existing capabilities include QGIS 4 / Qt 6 support, automatic snapping, sessions, reverse geocoding, record review and CSV, GeoJSON and GeoPackage export. There are no external Python dependencies.
-version=1.5.0
+description=Find, match, verify, review and capture online or offline places as auditable QGIS point records.
+about=GeoClick Capture is a lightweight location-verification, capture-log and review tool for field verification, map review and GIS quality assurance. Version 1.6.0 adds a Review Queue with filters, multi-record decisions, reviewer comments, Approve, Reject, Needs changes and Reset pending actions, immutable JSON history, review iterations and CSV export. Decisions synchronise the operational status and preserve reviewer, UTC timestamp, comment and whether further review is required. Version 1.5.0 adds an Offline Gazetteer for UTF-8 CSV files and loaded QGIS point layers, including GeoPackage and database layers, with local name, alias and P-code search. Version 1.4.0 provides Match & Verify with duplicate-risk evidence. Version 1.3.0 provides Nominatim place search, coordinates and supported map URLs. The plugin supports QGIS 3.28+, QGIS 4 / Qt 6, snapping, sessions, reverse geocoding and CSV, GeoJSON and GeoPackage export without external Python dependencies.
+version=1.6.0
 qgisMinimumVersion=3.28
 qgisMaximumVersion=4.99
 author=Jubílio Maússe
@@ -13,19 +13,20 @@ tracker=https://github.com/Jubilio/qgis-latlon/issues
 license=MIT
 icon=icons/capture_point.svg
 category=Vector
-tags=offline gazetteer,P-code,place matching,duplicate detection,address search,coordinate capture,geocoding,OpenStreetMap,Nominatim,field verification,quality assurance,audit trail,WGS84
-changelog=1.5.0 - Adds an Offline Gazetteer tab for UTF-8 CSV and loaded QGIS point layers, with automatic field detection, offline name/alias/P-code search, preview, matching, auditable capture, a CSV template and four new icons.
+tags=review workflow,quality assurance,offline gazetteer,P-code,place matching,duplicate detection,address search,coordinate capture,geocoding,OpenStreetMap,Nominatim,audit trail,WGS84
+changelog=1.6.0 - Adds a Review Queue with state and text filters, multi-record approval/rejection/change requests, required reviewer and critical comments, immutable history, iteration tracking, CSV export and six new icons.
+    1.5.0 - Adds an Offline Gazetteer tab for UTF-8 CSV and loaded QGIS point layers, with automatic field detection, offline name/alias/P-code search, preview, matching, auditable capture, a CSV template and four new icons.
     1.4.0 - Adds Match & Verify with nearby-feature scanning, name similarity, geodesic distance, confidence scoring, duplicate-risk classification and auditable Use existing/Create new decisions, with six new function-specific icons.
-    1.3.0 - Adds a Search & Capture tab for addresses and place names through Nominatim, decimal coordinates and OpenStreetMap/Google Maps URLs; supports result review, zoom, preview, copy, external map links and auditable insertion into the active session with seven new function-specific icons.
-    1.2.6 - Adds a coordinated transparent SVG icon set for capture, log, snapping, geocoding, export, undo, deletion and sessions, and assigns icons to menu actions and dock controls.
-    1.2.5 - Treats Nominatim's Unable to geocode response as a valid no-result condition, progressively searches broader administrative levels and keeps the captured point when no OSM place is available.
-    1.2.4 - Improved reverse geocoding with safe redirect handling, transfer timeout, application identification, SSL/HTTP diagnostics, one retry for transient failures and clearer no-result messages.
-    1.2.3 - Replaced all 12 unscoped Qt 5/QGIS enum accesses in the base implementation with Qt 6-scoped enums and PyQt 5 fallbacks; expanded AST validation for the complete package.
-    1.2.2 - Fixed false GitHub Actions failures by analysing executable Qt enum access and validating only tracked cache files; runtime Qt 5/Qt 6 compatibility and geometry snapping remain unchanged.
-    1.2.1 - Fixed QGIS 4 / Qt 6 dock enum compatibility and added automatic vertex-first/segment fallback snapping with configurable pixel tolerance and snapping audit fields.
-    1.2.0 - Added Capture Log dock panel, capture sessions, operator/category/status/note fields, destination layer selector, table review, undo/delete/clear actions, persistent preferences, project and source-feature audit fields, GeoJSON export, geocoding cache, one-request-per-second rate limiting, timeout and OpenStreetMap attribution.
-    1.1.0 - Repositioned the plugin as a lightweight point logger; added UTC timestamps, original map coordinates and project CRS fields; moved actions to the Vector menu; added submission-ready metadata, packaged licence, documentation and sample data.
-    1.0.0 - Corrected CRS handling, layer writing, exports, Qt compatibility and asynchronous reverse geocoding.
+    1.3.0 - Adds Search & Capture for Nominatim addresses, coordinates and supported OpenStreetMap/Google Maps URLs.
+    1.2.6 - Adds a coordinated SVG icon set for capture, log, snapping, geocoding, export, undo, deletion and sessions.
+    1.2.5 - Adds progressive reverse-geocoding fallback and preserves points when no OSM place is available.
+    1.2.4 - Improves network diagnostics, redirects, timeouts and retry handling.
+    1.2.3 - Adds Qt 6-scoped enum compatibility across the package.
+    1.2.2 - Fixes false Qt compatibility and cache validation failures.
+    1.2.1 - Adds QGIS 4 / Qt 6 support and automatic snapping.
+    1.2.0 - Adds Capture Log sessions, metadata, review, management and exports.
+    1.1.0 - Repositions the plugin as GeoClick Capture with submission-ready documentation.
+    1.0.0 - Corrects CRS handling, layer writing, exports and asynchronous reverse geocoding.
 experimental=False
 deprecated=False
 hasProcessingProvider=False
