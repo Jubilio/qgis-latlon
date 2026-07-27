@@ -1,8 +1,8 @@
 [general]
 name=GeoClick Capture
-description=Find, match, verify, review and capture online or offline places as auditable QGIS point records.
-about=GeoClick Capture is a lightweight location-verification, capture-log and review tool for field verification, map review and GIS quality assurance. Version 1.6.0 adds a Review Queue with filters, multi-record decisions, reviewer comments, Approve, Reject, Needs changes and Reset pending actions, immutable JSON history, review iterations and CSV export. Decisions synchronise the operational status and preserve reviewer, UTC timestamp, comment and whether further review is required. Version 1.5.0 adds an Offline Gazetteer for UTF-8 CSV files and loaded QGIS point layers, including GeoPackage and database layers, with local name, alias and P-code search. Version 1.4.0 provides Match & Verify with duplicate-risk evidence. Version 1.3.0 provides Nominatim place search, coordinates and supported map URLs. The plugin supports QGIS 3.28+, QGIS 4 / Qt 6, snapping, sessions, reverse geocoding and CSV, GeoJSON and GeoPackage export. There are no external Python dependencies.
-version=1.6.0
+description=Verify locations across online, offline and QGIS sources with evidence, review and auditable reports.
+about=GeoClick Capture 2.0.0 introduces a unified Location Verification Workspace for comparing online search results, institutional gazetteers, existing QGIS features, polygon or line centroids and manual coordinates. Users explicitly select a preferred source after reviewing transparent trust, agreement and recommendation scores; attach local files or URLs with SHA-256 evidence hashes; create a temporary comparison layer; persist the workspace in the QGIS project; import candidate CSV or shareable workspace packages; and export a ZIP verification bundle containing JSON, HTML, CSV tables, a manifest and copied attachments. The preferred location can be saved to the auditable capture session with source spread, consensus, rationale, verifier, evidence manifest and complete workspace snapshot. Earlier capabilities include Review Queue, Offline Gazetteer, Match & Verify, Nominatim search, coordinates, map URLs, snapping, sessions, reverse geocoding and CSV, GeoJSON and GeoPackage export. The plugin supports QGIS 3.28+, QGIS 4 / Qt 6 and has no external Python dependencies.
+version=2.0.0
 qgisMinimumVersion=3.28
 qgisMaximumVersion=4.99
 author=Jubílio Maússe
@@ -13,8 +13,9 @@ tracker=https://github.com/Jubilio/qgis-latlon/issues
 license=MIT
 icon=icons/capture_point.svg
 category=Vector
-tags=review workflow,quality assurance,offline gazetteer,P-code,place matching,duplicate detection,address search,coordinate capture,geocoding,OpenStreetMap,Nominatim,audit trail,WGS84
-changelog=1.6.0 - Adds a Review Queue with state and text filters, multi-record approval/rejection/change requests, required reviewer and critical comments, immutable history, iteration tracking, CSV export and six new icons.
+tags=location verification,source comparison,evidence,verification report,workspace,offline gazetteer,P-code,place matching,duplicate detection,address search,coordinate capture,geocoding,OpenStreetMap,Nominatim,audit trail,WGS84
+changelog=2.0.0 - Adds the Location Verification Workspace with multi-source candidate comparison, explicit preferred-source selection, QGIS point/line/polygon evidence through centroids, file and URL evidence with SHA-256 hashes, project persistence, candidate CSV import, comparison layers, shareable workspace import and ZIP verification bundles with HTML/CSV/JSON reports and attachments.
+    1.6.0 - Adds Review Queue filters, multi-record decisions, immutable history, reviewer comments and CSV export.
     1.5.0 - Adds an Offline Gazetteer tab for UTF-8 CSV and loaded QGIS point layers, with automatic field detection, offline name/alias/P-code search, preview, matching, auditable capture, a CSV template and four new icons.
     1.4.0 - Adds Match & Verify with nearby-feature scanning, name similarity, geodesic distance, confidence scoring, duplicate-risk classification and auditable Use existing/Create new decisions, with six new function-specific icons.
     1.3.0 - Adds Search & Capture for Nominatim addresses, coordinates and supported OpenStreetMap/Google Maps URLs.

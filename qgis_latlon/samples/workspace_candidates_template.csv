@@ -1,0 +1,3 @@
+label,latitude,longitude,source,source_kind,source_id,source_url,source_date,geometry_type,admin,notes
+Hospital Provincial de Pemba,-12.973100,40.517200,Provincial health registry,institutional,H001,,2026-06-30,Point,"Pemba, Cabo Delgado",Official registry coordinate
+Pemba Provincial Hospital,-12.973250,40.517330,OpenStreetMap Nominatim,nominatim,osm-node-123,https://www.openstreetmap.org/,2026-07-27,Point,"Pemba, Cabo Delgado",Online comparison source

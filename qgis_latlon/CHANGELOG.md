@@ -1,5 +1,18 @@
 # Changelog
 
+## 2.0.0 — 2026-07-27
+
+- Added a sixth **Verification Workspace** tab and a dedicated toolbar/menu action.
+- Added one auditable workspace that combines online search results, offline gazetteers, existing QGIS matches, manual coordinates and selected QGIS point, line or polygon features.
+- Added transparent source trust, spatial agreement and recommendation scores; the plugin recommends but never selects the preferred source automatically.
+- Added explicit preferred-source selection, maximum source spread and Strong/Moderate/Weak/Divergent consensus classes.
+- Added file and URL evidence with SHA-256 hashes, file size, author, timestamp and notes.
+- Added project-level workspace persistence and shareable JSON/ZIP workspace import.
+- Added candidate CSV import and temporary WGS84 comparison-layer creation.
+- Added ZIP verification bundles containing `workspace.json`, `report.html`, candidates/evidence CSV files, a manifest and copied attachments.
+- Added workspace audit fields for source counts, spread, consensus, evidence, rationale, verifier, timestamp and the complete workspace snapshot.
+- Added seven coordinated SVG icons and pure-Python tests for comparison, evidence hashing, CSV import and verification bundles.
+
 ## 1.6.0 — 2026-07-27
 
 - Added a fifth **Review Queue** tab and a dedicated toolbar/menu action.

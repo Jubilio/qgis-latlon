@@ -15,7 +15,9 @@ ICONS = (
     "gazetteer.svg", "load_gazetteer.svg", "offline_search.svg",
     "gazetteer_capture.svg", "review_queue.svg", "review_approve.svg",
     "review_reject.svg", "review_changes.svg", "review_history.svg",
-    "review_export.svg",
+    "review_export.svg", "workspace.svg", "add_candidate.svg",
+    "preferred_source.svg", "add_evidence.svg", "workspace_bundle.svg",
+    "import_workspace.svg", "comparison_layer.svg",
 )
 
 
@@ -38,6 +40,8 @@ class IconTests(unittest.TestCase):
         gazetteer_dock = (PLUGIN / "dock_widget_v150.py").read_text(encoding="utf-8")
         review_source = (PLUGIN / "plugin_v160.py").read_text(encoding="utf-8")
         review_dock = (PLUGIN / "dock_widget_v160.py").read_text(encoding="utf-8")
+        workspace_source = (PLUGIN / "plugin_v200.py").read_text(encoding="utf-8")
+        workspace_dock = (PLUGIN / "dock_widget_v200.py").read_text(encoding="utf-8")
         for name in ("search_place.svg", "capture_point.svg"):
             self.assertIn(name, search_source + search_dock)
         for name in (
@@ -60,6 +64,12 @@ class IconTests(unittest.TestCase):
             "review_changes.svg", "review_history.svg", "review_export.svg",
         ):
             self.assertIn(name, review_source + review_dock)
+        for name in (
+            "workspace.svg", "add_candidate.svg", "preferred_source.svg",
+            "add_evidence.svg", "workspace_bundle.svg", "import_workspace.svg",
+            "comparison_layer.svg",
+        ):
+            self.assertIn(name, workspace_source + workspace_dock)
 
 
 if __name__ == "__main__":
