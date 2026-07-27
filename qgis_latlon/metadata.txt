@@ -1,8 +1,8 @@
 [general]
 name=GeoClick Capture
-description=Log auditable map clicks with Qt 6 support and automatic snapping to line/polygon vertices and segments.
-about=GeoClick Capture is a lightweight capture-log tool for field verification, map review and GIS quality assurance. Version 1.2.6 supports QGIS 4 / Qt 6 and automatically attracts captures to nearby vertices or segments in visible line and polygon layers. A dock panel manages sessions, operator, category, status, notes and destination layers. Each click records UTC time, WGS 84 coordinates, original map coordinates, project information and source-feature context. Records can be reviewed, deleted, undone and exported to CSV, GeoJSON or GeoPackage. Optional reverse geocoding uses the QGIS network manager with safe redirects, caching, rate limiting, timeout, one transient retry, detailed diagnostics and progressive fallback from detailed addresses to settlement, city, province and country levels. Version 1.2.6 adds coordinated SVG icons for the main menu actions and Capture Log controls. There are no external Python dependencies.
-version=1.2.6
+description=Find, review and capture places, coordinates and map URLs as auditable QGIS point records.
+about=GeoClick Capture is a lightweight location-verification and capture-log tool for field verification, map review and GIS quality assurance. Version 1.3.0 adds a tabbed Search & Capture workflow for place names and addresses through OpenStreetMap Nominatim, direct decimal coordinates, and OpenStreetMap or Google Maps URLs. Results can be reviewed, zoomed, previewed, copied, opened in external maps and added to the active capture session. Search captures store the input method, original query, provider, provider result ID, label, type, importance and OSM identifiers. Text searches can be restricted to Mozambique or another country and optionally to the current QGIS map extent. Requests use the QGIS network manager with safe redirects, caching, timeout, one transient retry, explicit OpenStreetMap attribution and rate limiting. Existing capabilities include QGIS 4 / Qt 6 support, automatic vertex-first and segment fallback snapping, sessions, operator/category/status/note fields, destination-layer selection, UTC and project context, reverse geocoding with progressive administrative fallback, record review, undo/delete/clear actions, and CSV, GeoJSON and GeoPackage export. There are no external Python dependencies.
+version=1.3.0
 qgisMinimumVersion=3.28
 qgisMaximumVersion=4.99
 author=Jubílio Maússe
@@ -13,8 +13,9 @@ tracker=https://github.com/Jubilio/qgis-latlon/issues
 license=MIT
 icon=icons/capture_point.svg
 category=Vector
-tags=coordinate capture,field verification,point logging,snapping,vertex,segment,quality assurance,audit trail,WGS84
-changelog=1.2.6 - Adds a coordinated transparent SVG icon set for capture, log, snapping, geocoding, export, undo, deletion and sessions, and assigns icons to menu actions and dock controls.
+tags=place search,address search,coordinate capture,geocoding,OpenStreetMap,Nominatim,field verification,point logging,snapping,quality assurance,audit trail,WGS84
+changelog=1.3.0 - Adds a Search & Capture tab for addresses and place names through Nominatim, decimal coordinates and OpenStreetMap/Google Maps URLs; supports result review, zoom, preview, copy, external map links and auditable insertion into the active session with seven new function-specific icons.
+    1.2.6 - Adds a coordinated transparent SVG icon set for capture, log, snapping, geocoding, export, undo, deletion and sessions, and assigns icons to menu actions and dock controls.
     1.2.5 - Treats Nominatim's Unable to geocode response as a valid no-result condition, progressively searches broader administrative levels and keeps the captured point when no OSM place is available.
     1.2.4 - Improved reverse geocoding with safe redirect handling, transfer timeout, application identification, SSL/HTTP diagnostics, one retry for transient failures and clearer no-result messages.
     1.2.3 - Replaced all 12 unscoped Qt 5/QGIS enum accesses in the base implementation with Qt 6-scoped enums and PyQt 5 fallbacks; expanded AST validation for the complete package.
