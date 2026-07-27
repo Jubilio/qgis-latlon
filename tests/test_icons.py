@@ -12,6 +12,8 @@ ICONS = (
     "copy_coordinates.svg", "open_osm.svg", "open_google_maps.svg",
     "match_verify.svg", "scan_candidates.svg", "zoom_existing.svg",
     "use_existing.svg", "create_new.svg", "duplicate_warning.svg",
+    "gazetteer.svg", "load_gazetteer.svg", "offline_search.svg",
+    "gazetteer_capture.svg",
 )
 
 
@@ -30,6 +32,8 @@ class IconTests(unittest.TestCase):
         search_dock = (PLUGIN / "dock_widget_v130.py").read_text(encoding="utf-8")
         match_source = (PLUGIN / "plugin_v140.py").read_text(encoding="utf-8")
         match_dock = (PLUGIN / "dock_widget_v140.py").read_text(encoding="utf-8")
+        gazetteer_source = (PLUGIN / "plugin_v150.py").read_text(encoding="utf-8")
+        gazetteer_dock = (PLUGIN / "dock_widget_v150.py").read_text(encoding="utf-8")
         for name in ("search_place.svg", "capture_point.svg"):
             self.assertIn(name, search_source + search_dock)
         for name in (
@@ -42,6 +46,11 @@ class IconTests(unittest.TestCase):
             "use_existing.svg", "create_new.svg", "duplicate_warning.svg",
         ):
             self.assertIn(name, match_source + match_dock)
+        for name in (
+            "gazetteer.svg", "load_gazetteer.svg", "offline_search.svg",
+            "gazetteer_capture.svg",
+        ):
+            self.assertIn(name, gazetteer_source + gazetteer_dock)
 
 
 if __name__ == "__main__":
