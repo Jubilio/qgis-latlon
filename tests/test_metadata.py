@@ -20,7 +20,7 @@ class MetadataTests(unittest.TestCase):
             self.assertTrue(self.general.get(key))
 
     def test_version(self):
-        self.assertEqual(self.general["version"], "1.6.0")
+        self.assertEqual(self.general["version"], "2.0.0")
 
     def test_packaged_version_is_synchronised(self):
         version = (PLUGIN / "VERSION").read_text(encoding="utf-8").strip()
@@ -37,8 +37,10 @@ class MetadataTests(unittest.TestCase):
             "dock_widget_v130.py", "search_utils.py", "plugin_v140.py",
             "dock_widget_v140.py", "match_utils.py", "plugin_v150.py",
             "dock_widget_v150.py", "gazetteer_utils.py", "plugin_v160.py",
-            "dock_widget_v160.py", "review_utils.py", "qgis_latlon.py",
+            "dock_widget_v160.py", "review_utils.py", "plugin_v200.py",
+            "dock_widget_v200.py", "workspace_utils.py", "qgis_latlon.py",
             "samples/offline_gazetteer_template.csv",
+            "samples/workspace_candidates_template.csv",
         ):
             self.assertTrue((PLUGIN / path).exists(), path)
 

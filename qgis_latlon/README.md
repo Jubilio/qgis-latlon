@@ -1,67 +1,76 @@
 # GeoClick Capture
 
-**GeoClick Capture** finds, matches, verifies, reviews and records auditable place locations in QGIS.
+**GeoClick Capture 2.0.0** is a QGIS workspace for finding, comparing, verifying, reviewing and recording auditable place locations.
 
-## Version 1.6.0
+## Location Verification Workspace
 
-The plugin contains five coordinated tabs:
+The sixth tab combines multiple sources for the same place:
 
-1. **Capture Log** — map-click capture, session metadata, snapping and export;
-2. **Search & Capture** — online place search, coordinates and supported map URLs;
-3. **Match & Verify** — comparison with existing point features before insertion;
-4. **Offline Gazetteer** — local search of institutional names, aliases and P-codes;
-5. **Review Queue** — formal approval, rejection, change requests and audit history.
+- online Nominatim results and supported map URLs;
+- institutional CSV or QGIS-layer gazetteers;
+- nearby existing features from **Match & Verify**;
+- manual coordinates;
+- selected QGIS point, line or polygon features, represented by their point or centroid while preserving the original geometry type and optional WKT evidence.
 
-### Review Queue
+Each candidate receives transparent values for:
 
-The fifth tab supports state and text filtering, selection of several records and the following decisions:
+- source trust;
+- spatial agreement with other candidates;
+- recommendation score;
+- distance to the user-selected preferred source.
 
-- **Approve**;
-- **Reject**;
-- **Needs changes**;
-- **Reset pending**.
+The recommendation is advisory. The user must explicitly choose **Set preferred**.
 
-A reviewer is required for every decision. Reject and Needs changes also require a comment. Each event is appended to `review_history` with iteration, action, state, reviewer, UTC timestamp and comment. The current state is stored in:
+## Evidence and reporting
 
-- `review_status`;
-- `reviewer`;
-- `reviewed_at`;
-- `review_comment`;
-- `review_history`;
-- `review_iteration`.
+The workspace can attach:
 
-The queue also includes a history viewer and filtered CSV export.
+- local files, hashed with SHA-256;
+- URLs or external references;
+- evidence notes, author and UTC timestamp.
 
-### Offline Gazetteer
+**Export bundle** creates a ZIP containing:
 
-The fourth tab loads UTF-8 CSV files or any point layer already open in QGIS, including GeoPackage and database layers. Common name, alias, P-code, coordinate, place-type and administrative fields are detected automatically. A template is included at `samples/offline_gazetteer_template.csv`.
+```text
+workspace.json
+report.html
+candidates.csv
+evidence.csv
+manifest.json
+attachments/
+```
 
-### Match & Verify
+The workspace is persisted as a QGIS project custom property and can also be imported from a JSON file or a previous bundle. A candidate CSV template is packaged at `samples/workspace_candidates_template.csv` and can contain fields such as `label`, `latitude`, `longitude`, `source`, `source_id`, `source_url`, `source_date`, `geometry_type`, `admin` and `notes`.
 
-The third tab evaluates geodesic distance, accent-insensitive name similarity, confidence and High/Medium/Low duplicate risk before the user chooses **Use existing** or **Create new**.
+## Saving to the capture session
 
-### Search & Capture
+After selecting a preferred candidate, the workspace writes an auditable point record and preserves:
 
-The online tab accepts OpenStreetMap Nominatim place names and addresses, decimal coordinates, OpenStreetMap URLs and Google Maps URLs containing coordinates. Searches are explicitly triggered; there is no automatic autocomplete traffic.
+- workspace and preferred-source identifiers;
+- candidate and source counts;
+- maximum source spread and consensus level;
+- agreement score;
+- evidence count and manifest;
+- verification status, rationale, verifier and UTC timestamp;
+- complete workspace snapshot;
+- geometry evidence types.
 
-### Capture Log
+Verified or rejected workspaces are integrated with the existing Review Queue history.
 
-Capture Log provides sessions, operator, category, status and notes; destination point-layer selection; map-click capture; snapping; undo, delete and clear actions; CSV, GeoJSON and GeoPackage exports; and optional reverse geocoding.
+## Other tabs
+
+1. **Capture Log** — map-click capture, snapping, sessions and export.
+2. **Search & Capture** — online place/address search, coordinates and map URLs.
+3. **Match & Verify** — duplicate-risk analysis against existing point layers.
+4. **Offline Gazetteer** — local names, aliases and P-codes without Internet.
+5. **Review Queue** — approval, rejection, change requests and immutable review history.
+6. **Verification Workspace** — multi-source comparison, evidence and full reporting.
 
 ## Installation
 
 1. Open **QGIS → Plugins → Manage and Install Plugins → Install from ZIP**.
-2. Select `geoclick_capture-1.6.0.zip` or the Pull Request test artefact.
-3. Restart or reload the plugin after replacing an older installation.
-
-## Review workflow
-
-1. Open **Vector → GeoClick Capture → Open review queue**.
-2. Select the destination layer.
-3. Filter the records.
-4. Enter the reviewer and comment when needed.
-5. Select one or several rows and record the decision.
-6. Inspect **History** or export the filtered queue.
+2. Select `geoclick_capture-2.0.0.zip`.
+3. Restart or reload the plugin after replacing an earlier version.
 
 ## Compatibility
 

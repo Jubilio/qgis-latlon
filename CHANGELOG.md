@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.0.0 — 2026-07-27
+
+- Added a unified **Location Verification Workspace** for online, offline, manual and QGIS source candidates.
+- Added transparent source-trust, spatial-agreement and recommendation scores with explicit preferred-source selection.
+- Added point, line and polygon evidence from selected QGIS features through their point or centroid.
+- Added file and URL evidence, SHA-256 hashes, project persistence and shareable workspace import.
+- Added candidate CSV import, temporary comparison layers and auditable workspace fields.
+- Added ZIP verification bundles with JSON, HTML, CSV tables, manifest and copied attachments.
+- Added seven coordinated SVG icons and pure-Python tests for comparison, hashing, import and bundle export.
+
 ## 1.6.0 — 2026-07-27
 
 - Added a fifth **Review Queue** tab and a dedicated toolbar/menu action.
