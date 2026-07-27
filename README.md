@@ -1,10 +1,25 @@
 # GeoClick Capture
 
-**GeoClick Capture** is a QGIS plugin for finding, reviewing and recording auditable place locations during field verification, map review and GIS quality-assurance work.
+**GeoClick Capture** is a QGIS plugin for finding, matching, verifying and recording auditable place locations during field verification, map review and GIS quality-assurance work.
 
-## Version 1.3.0 — Search & Capture
+## Version 1.4.0 — Match & Verify
 
-Version 1.3.0 adds a dedicated **Search & Capture** tab alongside the existing Capture Log.
+Version 1.4.0 adds a third **Match & Verify** tab. A selected Search & Capture result can be compared with existing point features before the user decides whether to link an existing record or create a new one.
+
+The analysis supports:
+
+- one selected point layer or all visible point layers;
+- a configurable search radius from 10 m to 50 km;
+- a preferred name field or automatic matching across text fields;
+- accent-insensitive name comparison;
+- geodesic distance in metres;
+- an explainable confidence score from 0 to 100;
+- High, Medium and Low duplicate-risk classes;
+- explicit **Use existing** and **Create new** decisions.
+
+The decision and supporting evidence are stored in the capture log through fields for matched layer/feature, distance, name similarity, confidence, duplicate risk and review requirement. The plugin never resolves a possible duplicate automatically.
+
+## Search & Capture
 
 Supported inputs:
 
@@ -13,18 +28,9 @@ Supported inputs:
 - OpenStreetMap URLs;
 - Google Maps URLs containing coordinates.
 
-Search results can be:
+Search results can be reviewed, zoomed, previewed, copied, opened in external maps, matched against existing layers or added directly to the active session.
 
-- reviewed in a results table;
-- zoomed to in QGIS;
-- previewed with a temporary map marker;
-- copied as coordinates;
-- opened in OpenStreetMap or Google Maps;
-- added to the active capture session.
-
-Each search capture records the input method, original query, provider, provider result ID, label, type, importance and OpenStreetMap identifiers. Text searches can be limited to a country and optionally to the current map extent.
-
-Existing capabilities remain active:
+## Existing capabilities
 
 - project snapping with vertex-first and segment fallback;
 - session, operator, category, status and note fields;
@@ -37,22 +43,28 @@ Existing capabilities remain active:
 
 ## Installation
 
-Download `geoclick_capture-1.3.0.zip`, then open:
+For phase-one testing, install the stable release `geoclick_capture-1.3.0.zip`.
+
+The Match & Verify implementation is developed as version 1.4.0 and its Pull Request artefact can be installed separately for testing.
+
+Open:
 
 **QGIS → Plugins → Manage and Install Plugins → Install from ZIP**
 
 Restart QGIS or reload the plugin after replacing an older installation.
 
-## Basic use
+## Match & Verify workflow
 
 1. Open **Vector → GeoClick Capture → Search & capture place**.
 2. Enter an address, place, coordinate pair or map URL.
-3. Review the returned result.
-4. Use **Zoom** or **Preview** to verify it on the map.
-5. Click **Add to session** to create an auditable point record.
-6. Open the **Capture Log** tab to review or export the session.
+3. Select a result and click **Match & verify**.
+4. Choose the visible-layer scope, radius and minimum name match.
+5. Click **Analyse nearby features**.
+6. Review distance, name match, confidence and risk.
+7. Select **Use existing** or **Create new**.
+8. Review the recorded decision in the Capture Log attributes.
 
-Text searches use the public OpenStreetMap Nominatim service and therefore require Internet access. Coordinate and supported URL inputs are parsed locally. The plugin sends searches only after the user presses Enter or clicks **Search**; it does not perform automatic autocomplete requests.
+Text searches use the public OpenStreetMap Nominatim service and require Internet access. Coordinate and supported URL inputs are parsed locally. Requests are sent only after Enter or **Search**; the plugin does not perform automatic autocomplete traffic.
 
 ## Development
 

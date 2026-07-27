@@ -10,6 +10,8 @@ ICONS = (
     "delete.svg", "session.svg", "search_place.svg",
     "zoom_result.svg", "preview_result.svg", "capture_search.svg",
     "copy_coordinates.svg", "open_osm.svg", "open_google_maps.svg",
+    "match_verify.svg", "scan_candidates.svg", "zoom_existing.svg",
+    "use_existing.svg", "create_new.svg", "duplicate_warning.svg",
 )
 
 
@@ -24,17 +26,22 @@ class IconTests(unittest.TestCase):
             self.assertEqual(root.attrib.get("viewBox"), "0 0 64 64", name)
 
     def test_runtime_references_function_icons(self):
-        source = (PLUGIN / "plugin_v130.py").read_text(encoding="utf-8")
-        dock = (PLUGIN / "dock_widget_v130.py").read_text(encoding="utf-8")
-        for name in (
-            "search_place.svg", "capture_point.svg",
-        ):
-            self.assertIn(name, source + dock)
+        search_source = (PLUGIN / "plugin_v130.py").read_text(encoding="utf-8")
+        search_dock = (PLUGIN / "dock_widget_v130.py").read_text(encoding="utf-8")
+        match_source = (PLUGIN / "plugin_v140.py").read_text(encoding="utf-8")
+        match_dock = (PLUGIN / "dock_widget_v140.py").read_text(encoding="utf-8")
+        for name in ("search_place.svg", "capture_point.svg"):
+            self.assertIn(name, search_source + search_dock)
         for name in (
             "zoom_result.svg", "preview_result.svg", "capture_search.svg",
             "copy_coordinates.svg", "open_osm.svg", "open_google_maps.svg",
         ):
-            self.assertIn(name, dock)
+            self.assertIn(name, search_dock)
+        for name in (
+            "match_verify.svg", "scan_candidates.svg", "zoom_existing.svg",
+            "use_existing.svg", "create_new.svg", "duplicate_warning.svg",
+        ):
+            self.assertIn(name, match_source + match_dock)
 
 
 if __name__ == "__main__":

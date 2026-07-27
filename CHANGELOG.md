@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.4.0 — 2026-07-27
+
+- Added a third **Match & Verify** tab and a dedicated toolbar/menu action.
+- Added scanning of one point layer or all visible point layers within a configurable distance.
+- Added accent-insensitive place-name comparison across preferred or automatically detected text fields.
+- Added explainable confidence scoring based on 65% name similarity and 35% spatial proximity.
+- Added High, Medium and Low duplicate-risk classifications with documented thresholds.
+- Added decisions to zoom to an existing feature, use the existing feature or create a new point.
+- Added audit fields for the selected decision, matched layer/feature, distance, name similarity, confidence, risk and review requirement.
+- Added six coordinated SVG icons for matching, scanning, duplicate warnings and decisions.
+- Added pure-Python tests for name normalisation, similarity, confidence, risk and candidate ordering.
+
 ## 1.3.0 — 2026-07-27
 
 - Added a new **Search & Capture** tab alongside the Capture Log.

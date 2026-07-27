@@ -1,56 +1,61 @@
 # GeoClick Capture
 
-**GeoClick Capture** finds, verifies and records auditable place locations in QGIS.
+**GeoClick Capture** finds, matches, verifies and records auditable place locations in QGIS.
 
-## Version 1.3.0
+## Version 1.4.0
 
-The **Search & Capture** tab accepts:
+The plugin contains three coordinated tabs:
 
-- place names and addresses through OpenStreetMap Nominatim;
-- decimal latitude/longitude pairs;
-- OpenStreetMap URLs;
-- Google Maps URLs containing coordinates.
+1. **Capture Log** — map-click capture, session metadata, snapping, review and export;
+2. **Search & Capture** — address/place search, coordinates and supported map URLs;
+3. **Match & Verify** — comparison with existing point features before insertion.
 
-Returned results can be zoomed to, previewed, copied, opened in external maps and added to the active capture session. Searches are triggered explicitly by Enter or the Search button; there is no automatic autocomplete traffic.
+### Match & Verify
 
-Search captures add the following provenance fields:
+The third tab can scan a selected point layer or all visible point layers. It evaluates:
 
-- `capture_method`;
-- `search_query`;
-- `search_provider`;
-- `provider_result_id`;
-- `result_label`;
-- `result_type`;
-- `result_importance`;
-- `osm_type`;
-- `osm_id`;
-- `input_format`.
+- distance in metres using geodesic measurement;
+- accent-insensitive similarity between the searched label and candidate text fields;
+- confidence from 0 to 100;
+- High, Medium or Low duplicate risk.
 
-The existing **Capture Log** tab continues to provide:
+The user explicitly chooses **Use existing** or **Create new**. The following audit fields are added when required:
 
-- sessions, operator, category, status and note fields;
-- destination point-layer selection;
-- map-click capture, undo, delete and clear actions;
-- project snapping with automatic vertex-first and segment fallback;
-- CSV, GeoJSON and GeoPackage exports;
-- optional reverse geocoding through `QgsNetworkAccessManager`.
+- `match_decision`;
+- `matched_layer`;
+- `matched_layer_id`;
+- `matched_feature_id`;
+- `match_distance_m`;
+- `name_similarity`;
+- `duplicate_risk`;
+- `confidence_score`;
+- `review_required`.
 
-Captured records include UTC time, WGS 84 coordinates, project coordinates, project information, source-feature context and snapping audit fields.
+### Search & Capture
+
+The Search & Capture tab accepts place names and addresses through OpenStreetMap Nominatim, decimal latitude/longitude pairs, OpenStreetMap URLs and Google Maps URLs containing coordinates. Searches are triggered explicitly by Enter or the Search button; there is no automatic autocomplete traffic.
+
+Search captures preserve provenance fields for capture method, query, provider, provider result ID, label, type, importance, OSM identifiers and input format.
+
+### Capture Log
+
+The existing Capture Log provides sessions, operator, category, status and notes; destination point-layer selection; map-click capture; vertex-first and segment fallback snapping; undo, delete and clear actions; CSV, GeoJSON and GeoPackage exports; and optional reverse geocoding.
 
 ## Installation
 
 1. Open **QGIS → Plugins → Manage and Install Plugins → Install from ZIP**.
-2. Select `geoclick_capture-1.3.0.zip`.
+2. Select `geoclick_capture-1.4.0.zip` or the Pull Request test artefact.
 3. Restart or reload the plugin after replacing an older installation.
 
-## Search workflow
+## Match workflow
 
-1. Open **Vector → GeoClick Capture → Search & capture place**.
-2. Enter a place, coordinate pair or map URL.
-3. Optionally change the country code or restrict a text search to the visible map extent.
-4. Select a result.
-5. Use **Zoom**, **Preview** or **Copy coordinates** to verify it.
-6. Click **Add to session**.
+1. Search for a place and select a result.
+2. Click **Match & verify**.
+3. Configure the layer scope, radius and minimum name match.
+4. Click **Analyse nearby features**.
+5. Review distance, name match, confidence and risk.
+6. Zoom to a candidate when necessary.
+7. Choose **Use existing** or **Create new**.
 
 ## Compatibility
 
