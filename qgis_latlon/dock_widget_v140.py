@@ -167,15 +167,21 @@ class CaptureLogDockV140(CaptureLogDockV130):
         actions.addWidget(self.create_new_button)
         root.addLayout(actions)
 
+        warning_row = QHBoxLayout()
+        warning_icon = QLabel()
+        warning_icon.setPixmap(plugin_icon("duplicate_warning.svg").pixmap(22, 22))
+        warning_icon.setToolTip("Possible duplicate warning")
         self.duplicate_note = QLabel(
-            "⚠ High-risk matches are spatially very close and have strongly similar "
+            "High-risk matches are spatially very close and have strongly similar "
             "names. The plugin never chooses automatically; the user records the decision."
         )
         self.duplicate_note.setWordWrap(True)
         self.duplicate_note.setToolTip(
             "Duplicate risk combines distance and name similarity using documented thresholds."
         )
-        root.addWidget(self.duplicate_note)
+        warning_row.addWidget(warning_icon)
+        warning_row.addWidget(self.duplicate_note, 1)
+        root.addLayout(warning_row)
 
         self._toggle_layer_controls(True)
         self._update_match_actions()
