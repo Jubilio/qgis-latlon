@@ -31,8 +31,11 @@ jobs:
           test -f qgis_latlon/plugin_v125.py
           test -f qgis_latlon/plugin_v126.py
           test -f qgis_latlon/dock_widget_v126.py
+          test -f qgis_latlon/plugin_v130.py
+          test -f qgis_latlon/dock_widget_v130.py
+          test -f qgis_latlon/search_utils.py
           test -f qgis_latlon/qgis_latlon.py
-          for icon in capture_point open_log snap reverse_geocode export undo delete session; do
+          for icon in capture_point open_log snap reverse_geocode export undo delete session search_place zoom_result preview_result capture_search copy_coordinates open_osm open_google_maps; do
             test -f "qgis_latlon/icons/${icon}.svg"
           done
           if git ls-files | grep -Eq '(^|/)__pycache__/|\.pyc$'; then
@@ -41,8 +44,8 @@ jobs:
             exit 1
           fi
       - name: Build installable ZIP
-        run: zip -qr geoclick_capture-1.2.6.zip qgis_latlon -x '*/__pycache__/*' '*.pyc'
+        run: zip -qr geoclick_capture-1.3.0.zip qgis_latlon -x '*/__pycache__/*' '*.pyc'
       - uses: actions/upload-artifact@v4
         with:
-          name: geoclick_capture-1.2.6
-          path: geoclick_capture-1.2.6.zip
+          name: geoclick_capture-1.3.0
+          path: geoclick_capture-1.3.0.zip
