@@ -7,7 +7,9 @@ PLUGIN = ROOT / "qgis_latlon"
 ICONS = (
     "capture_point.svg", "open_log.svg", "snap.svg",
     "reverse_geocode.svg", "export.svg", "undo.svg",
-    "delete.svg", "session.svg",
+    "delete.svg", "session.svg", "search_place.svg",
+    "zoom_result.svg", "preview_result.svg", "capture_search.svg",
+    "copy_coordinates.svg", "open_osm.svg", "open_google_maps.svg",
 )
 
 
@@ -22,16 +24,15 @@ class IconTests(unittest.TestCase):
             self.assertEqual(root.attrib.get("viewBox"), "0 0 64 64", name)
 
     def test_runtime_references_function_icons(self):
-        source = (PLUGIN / "plugin_v126.py").read_text(encoding="utf-8")
-        dock = (PLUGIN / "dock_widget_v126.py").read_text(encoding="utf-8")
+        source = (PLUGIN / "plugin_v130.py").read_text(encoding="utf-8")
+        dock = (PLUGIN / "dock_widget_v130.py").read_text(encoding="utf-8")
         for name in (
-            "capture_point.svg", "open_log.svg", "reverse_geocode.svg",
-            "session.svg",
+            "search_place.svg", "capture_point.svg",
         ):
-            self.assertIn(name, source)
+            self.assertIn(name, source + dock)
         for name in (
-            "capture_point.svg", "snap.svg", "export.svg", "undo.svg",
-            "delete.svg", "session.svg",
+            "zoom_result.svg", "preview_result.svg", "capture_search.svg",
+            "copy_coordinates.svg", "open_osm.svg", "open_google_maps.svg",
         ):
             self.assertIn(name, dock)
 
