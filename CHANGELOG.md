@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.3.0 — 2026-07-27
+
+- Added a new **Search & Capture** tab alongside the Capture Log.
+- Added place and address search through OpenStreetMap Nominatim with optional country and current-map-extent restrictions.
+- Added local recognition of decimal coordinates and common OpenStreetMap and Google Maps URLs.
+- Added result review actions for zoom, preview, coordinate copying and opening results in external maps.
+- Added auditable insertion of selected search results into the active capture session.
+- Added provenance fields for capture method, query, provider, provider ID, label, type, importance, OSM identifiers and input format.
+- Added in-memory search caching, explicit attribution, safe redirects, timeout and one transient retry.
+- Added seven coordinated SVG icons for the new functions.
+- Added pure-Python unit tests for coordinate parsing, map URL parsing and Nominatim response normalisation.
+
 ## 1.2.6 — 2026-07-24
 
 - Added eight coordinated transparent SVG icons for capture, capture log, snapping, reverse geocoding, export, undo, deletion and sessions.
