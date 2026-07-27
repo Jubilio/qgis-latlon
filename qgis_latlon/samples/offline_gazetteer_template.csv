@@ -1,0 +1,3 @@
+place_id,official_name,alternative_names,place_type,pcode,latitude,longitude,country,province,district,admin_post,locality,source,source_date
+MZ-PLACE-001,Mueda,"Mueda Sede; Vila de Mueda",town,MZ010101,-11.6714,39.5632,Mozambique,Cabo Delgado,Mueda,Mueda,Mueda,Example gazetteer,2026-07-27
+MZ-HEALTH-001,Hospital Provincial de Pemba,"Pemba Provincial Hospital; HPP",health facility,MZ-H-001,-12.9742,40.5178,Mozambique,Cabo Delgado,Pemba,Pemba,Pemba,Example gazetteer,2026-07-27

@@ -2,26 +2,30 @@
 
 **GeoClick Capture** is a QGIS plugin for finding, matching, verifying and recording auditable place locations during field verification, map review and GIS quality-assurance work.
 
-## Version 1.4.0 — Match & Verify
+## Version 1.5.0 — Offline Gazetteer
 
-Version 1.4.0 adds a third **Match & Verify** tab. A selected Search & Capture result can be compared with existing point features before the user decides whether to link an existing record or create a new one.
+Version 1.5.0 adds a fourth **Offline Gazetteer** tab for institutional and project-specific place lists.
 
-The analysis supports:
+The gazetteer can use:
 
-- one selected point layer or all visible point layers;
-- a configurable search radius from 10 m to 50 km;
-- a preferred name field or automatic matching across text fields;
-- accent-insensitive name comparison;
-- geodesic distance in metres;
-- an explainable confidence score from 0 to 100;
-- High, Medium and Low duplicate-risk classes;
-- explicit **Use existing** and **Create new** decisions.
+- UTF-8 or UTF-8-BOM CSV files;
+- any point layer already open in QGIS, including GeoPackage and database-backed layers.
 
-The decision and supporting evidence are stored in the capture log through fields for matched layer/feature, distance, name similarity, confidence, duplicate risk and review requirement. The plugin never resolves a possible duplicate automatically.
+The plugin automatically detects common fields for official names, aliases, P-codes, coordinates, place types, administrative names, source and source date. Searches run locally across official names, alternative spellings and P-codes and can be filtered by place type.
+
+Offline results can be previewed, zoomed to, passed to **Match & Verify**, or added directly to the active capture session. Source, record ID, P-code, name, aliases, place type, administrative hierarchy and source date are preserved in audit fields.
+
+A compatible template is packaged at:
+
+`qgis_latlon/samples/offline_gazetteer_template.csv`
+
+## Match & Verify
+
+Version 1.4.0 compares searched or offline places with one point layer or all visible point layers. It evaluates geodesic distance, accent-insensitive name similarity, confidence from 0 to 100 and High/Medium/Low duplicate risk. The user explicitly chooses **Use existing** or **Create new**.
 
 ## Search & Capture
 
-Supported inputs:
+Supported online/direct inputs include:
 
 - place names and addresses through OpenStreetMap Nominatim;
 - decimal coordinates such as `-12.9742, 40.5178`;
@@ -43,28 +47,22 @@ Search results can be reviewed, zoomed, previewed, copied, opened in external ma
 
 ## Installation
 
-For phase-one testing, install the stable release `geoclick_capture-1.3.0.zip`.
-
-The Match & Verify implementation is developed as version 1.4.0 and its Pull Request artefact can be installed separately for testing.
-
 Open:
 
 **QGIS → Plugins → Manage and Install Plugins → Install from ZIP**
 
-Restart QGIS or reload the plugin after replacing an older installation.
+Select `geoclick_capture-1.5.0.zip` or the Pull Request test artefact, then restart QGIS or reload the plugin.
 
-## Match & Verify workflow
+## Offline Gazetteer workflow
 
-1. Open **Vector → GeoClick Capture → Search & capture place**.
-2. Enter an address, place, coordinate pair or map URL.
-3. Select a result and click **Match & verify**.
-4. Choose the visible-layer scope, radius and minimum name match.
-5. Click **Analyse nearby features**.
-6. Review distance, name match, confidence and risk.
-7. Select **Use existing** or **Create new**.
-8. Review the recorded decision in the Capture Log attributes.
+1. Open **Vector → GeoClick Capture → Open offline gazetteer**.
+2. Load a CSV or select a QGIS point layer.
+3. Search an official name, alternative spelling or P-code.
+4. Review the result and use **Preview** or **Zoom**.
+5. Select **Match & verify** or **Add to session**.
+6. Review the gazetteer source fields in the Capture Log attributes.
 
-Text searches use the public OpenStreetMap Nominatim service and require Internet access. Coordinate and supported URL inputs are parsed locally. Requests are sent only after Enter or **Search**; the plugin does not perform automatic autocomplete traffic.
+Text searches through Nominatim require Internet access. Offline gazetteer, coordinate and supported URL inputs do not.
 
 ## Development
 

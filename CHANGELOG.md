@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.5.0 — 2026-07-27
+
+- Added a fourth **Offline Gazetteer** tab and a dedicated toolbar/menu action.
+- Added UTF-8/UTF-8-BOM CSV loading with automatic detection of names, aliases, P-codes, coordinates, place types and administrative fields.
+- Added support for using any loaded QGIS point layer as an offline gazetteer, including GeoPackage and database-backed layers.
+- Added local search across official names, alternative spellings and P-codes, with optional place-type filtering.
+- Added preview, zoom, Match & Verify and auditable Add to session actions for offline results.
+- Added gazetteer audit fields for source, record ID, P-code, name, aliases, type, administration and source date.
+- Added a packaged CSV template, four coordinated SVG icons and pure-Python gazetteer tests.
+
 ## 1.4.0 — 2026-07-27
 
 - Added a third **Match & Verify** tab and a dedicated toolbar/menu action.
