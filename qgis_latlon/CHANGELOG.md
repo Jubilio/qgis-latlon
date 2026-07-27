@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.6.0 — 2026-07-27
+
+- Added a fifth **Review Queue** tab and a dedicated toolbar/menu action.
+- Added review-state and free-text filters across IDs, place labels, capture methods, risks, reviewers and comments.
+- Added multi-record **Approve**, **Reject**, **Needs changes** and **Reset pending** actions.
+- Required a reviewer for every decision and a comment for rejections and change requests.
+- Added immutable JSON review history with iteration number, action, state, reviewer, UTC timestamp and comment.
+- Added review audit fields: `review_status`, `reviewer`, `reviewed_at`, `review_comment`, `review_history` and `review_iteration`.
+- Synchronised review decisions with the existing operational `status` and `review_required` fields.
+- Added review-history display, CSV export and six coordinated SVG icons.
+- Added pure-Python tests for state normalisation, history parsing/appending, filtering and status counts.
+
 ## 1.5.0 — 2026-07-27
 
 - Added a fourth **Offline Gazetteer** tab and a dedicated toolbar/menu action.
@@ -65,7 +77,7 @@
 
 ## 1.2.2 — 2026-07-23
 
-- Fixed false GitHub Actions failures in Qt compatibility and cache checks.
+- Fixed false failures in Qt compatibility and cache checks.
 
 ## 1.2.1 — 2026-07-23
 
