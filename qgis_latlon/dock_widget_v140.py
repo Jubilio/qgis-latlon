@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Dict, List, Optional
 
-from qgis.PyQt.QtCore import pyqtSignal
+from qgis.PyQt.QtCore import QVariant, pyqtSignal
 from qgis.PyQt.QtWidgets import (
     QAbstractItemView,
     QCheckBox,
@@ -168,11 +168,10 @@ class CaptureLogDockV140(CaptureLogDockV130):
         root.addLayout(actions)
 
         self.duplicate_note = QLabel(
-            "High-risk matches are spatially very close and have strongly similar names. "
-            "The plugin never chooses automatically; the user records the decision."
+            "⚠ High-risk matches are spatially very close and have strongly similar "
+            "names. The plugin never chooses automatically; the user records the decision."
         )
         self.duplicate_note.setWordWrap(True)
-        self.duplicate_note.setPixmap(plugin_icon("duplicate_warning.svg").pixmap(18, 18))
         self.duplicate_note.setToolTip(
             "Duplicate risk combines distance and name similarity using documented thresholds."
         )
@@ -218,7 +217,7 @@ class CaptureLogDockV140(CaptureLogDockV130):
         if layer is None or not layer.isValid():
             return
         for field in layer.fields():
-            if field.isNumeric():
+            if field.type() != QVariant.String:
                 continue
             self.name_field_combo.addItem(field.name(), field.name())
 
