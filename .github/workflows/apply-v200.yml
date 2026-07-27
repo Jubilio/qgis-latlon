@@ -25,10 +25,20 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          cat .github/v200-payload/part-*.b64 | tr -d '\n' | base64 --decode > /tmp/v200-changes.tar.xz
+          cat \
+            .github/v200-payload2/chunk-00.b64 \
+            .github/v200-payload2/chunk-01.b64 \
+            .github/v200-payload2/chunk-02.b64 \
+            .github/v200-payload/part-01.b64 \
+            .github/v200-payload/part-02.b64 \
+            .github/v200-payload/part-03.b64 \
+            .github/v200-payload/part-04.b64 \
+            .github/v200-payload/part-05.b64 \
+            | tr -d '\n' \
+            | base64 --decode > /tmp/v200-changes.tar.xz
           echo '6cbd298f49ea6322a94f9a1d1984da711b60db2252c6522aa3860e33d4763db3  /tmp/v200-changes.tar.xz' | sha256sum -c -
           tar -xJf /tmp/v200-changes.tar.xz -C .
-          rm -rf .github/v200-payload .github/workflows/apply-v200.yml
+          rm -rf .github/v200-payload .github/v200-payload2 .github/workflows/apply-v200.yml
 
       - name: Validate before commit
         run: |
