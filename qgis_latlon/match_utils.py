@@ -29,7 +29,13 @@ def token_similarity(left: object, right: object) -> float:
     second_tokens = " ".join(sorted(set(second.split())))
     token_score = SequenceMatcher(None, first_tokens, second_tokens).ratio()
     containment = 1.0 if first in second or second in first else 0.0
-    return max(0.0, min(1.0, (direct * 0.45) + (token_score * 0.45) + (containment * 0.10)))
+    return max(
+        0.0,
+        min(
+            1.0,
+            (direct * 0.35) + (token_score * 0.55) + (containment * 0.10),
+        ),
+    )
 
 
 def best_name_match(query: object, values: Iterable[object]) -> Dict[str, object]:
