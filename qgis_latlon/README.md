@@ -1,39 +1,56 @@
 # GeoClick Capture
 
-**GeoClick Capture** builds auditable point logs for field verification, map review and GIS quality assurance.
+**GeoClick Capture** finds, verifies and records auditable place locations in QGIS.
 
-## Version 1.2.6
+## Version 1.3.0
 
-This release adds a coordinated visual icon set for the plugin's principal functions. Capture, capture log, snapping, reverse geocoding, export, undo, deletion and session management now use distinct dark-teal and orange SVG icons with transparent backgrounds.
+The **Search & Capture** tab accepts:
 
-Menu actions and the Capture Log panel expose these icons consistently, making frequently used operations easier to identify at a glance. The plugin icon shown by QGIS also uses the new capture-point artwork.
+- place names and addresses through OpenStreetMap Nominatim;
+- decimal latitude/longitude pairs;
+- OpenStreetMap URLs;
+- Google Maps URLs containing coordinates.
 
-Reverse-geocoding fallback, QGIS 4 / Qt 6 compatibility and automatic geometry snapping remain unchanged.
+Returned results can be zoomed to, previewed, copied, opened in external maps and added to the active capture session. Searches are triggered explicitly by Enter or the Search button; there is no automatic autocomplete traffic.
 
-The **Capture Log** panel provides:
+Search captures add the following provenance fields:
 
-- session, operator, category, status and note fields;
-- a destination point-layer selector;
-- start/stop capture, undo, delete and clear actions;
-- snapping enable/disable and pixel tolerance controls;
+- `capture_method`;
+- `search_query`;
+- `search_provider`;
+- `provider_result_id`;
+- `result_label`;
+- `result_type`;
+- `result_importance`;
+- `osm_type`;
+- `osm_id`;
+- `input_format`.
+
+The existing **Capture Log** tab continues to provide:
+
+- sessions, operator, category, status and note fields;
+- destination point-layer selection;
+- map-click capture, undo, delete and clear actions;
+- project snapping with automatic vertex-first and segment fallback;
 - CSV, GeoJSON and GeoPackage exports;
 - optional reverse geocoding through `QgsNetworkAccessManager`.
 
-Captured records include UTC time, WGS 84 coordinates, project coordinates, project information, source-feature context and the snapping audit fields `snapped`, `snap_type` and `snap_distance`.
+Captured records include UTC time, WGS 84 coordinates, project coordinates, project information, source-feature context and snapping audit fields.
 
 ## Installation
 
 1. Open **QGIS → Plugins → Manage and Install Plugins → Install from ZIP**.
-2. Select `geoclick_capture-1.2.6.zip`.
+2. Select `geoclick_capture-1.3.0.zip`.
 3. Restart or reload the plugin after replacing an older installation.
 
-## Usage
+## Search workflow
 
-1. Open **Vector → GeoClick Capture → Open capture log**.
-2. Define the session information and destination point layer.
-3. Keep **Snap to line/polygon vertices and segments** enabled.
-4. Set the snap tolerance in screen pixels; 12 px is the default.
-5. Start capture and click near a line or polygon vertex or edge.
+1. Open **Vector → GeoClick Capture → Search & capture place**.
+2. Enter a place, coordinate pair or map URL.
+3. Optionally change the country code or restrict a text search to the visible map extent.
+4. Select a result.
+5. Use **Zoom**, **Preview** or **Copy coordinates** to verify it.
+6. Click **Add to session**.
 
 ## Compatibility
 
