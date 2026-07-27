@@ -32,6 +32,7 @@ jobs:
           test -f qgis_latlon/plugin_v126.py
           test -f qgis_latlon/dock_widget_v126.py
           test -f qgis_latlon/plugin_v130.py
+          test -f qgis_latlon/plugin_v130_policy.py
           test -f qgis_latlon/dock_widget_v130.py
           test -f qgis_latlon/search_utils.py
           test -f qgis_latlon/qgis_latlon.py
