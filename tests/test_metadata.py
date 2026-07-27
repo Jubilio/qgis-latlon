@@ -33,8 +33,8 @@ class MetadataTests(unittest.TestCase):
             "__init__.py", "metadata.txt", "LICENSE", "README.md",
             "CHANGELOG.md", "VERSION", "dock_widget.py", "plugin_v121.py",
             "plugin_v124.py", "plugin_v125.py", "plugin_v126.py",
-            "dock_widget_v126.py", "plugin_v130.py", "dock_widget_v130.py",
-            "search_utils.py", "qgis_latlon.py",
+            "dock_widget_v126.py", "plugin_v130.py", "plugin_v130_policy.py",
+            "dock_widget_v130.py", "search_utils.py", "qgis_latlon.py",
         ):
             self.assertTrue((PLUGIN / path).exists(), path)
 
