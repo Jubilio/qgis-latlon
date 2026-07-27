@@ -33,8 +33,6 @@ def normalise_review_status(value: object, review_required: object = None) -> st
     }
     if key in aliases:
         return aliases[key]
-    # Empty legacy records remain visible in the queue. review_required is kept
-    # for forward compatibility and may be a QVariant-compatible value.
     return "Pending"
 
 
@@ -48,7 +46,7 @@ def parse_review_history(value: object) -> List[Dict[str, object]]:
             return []
         try:
             payload = json.loads(text)
-        except (TypeError, ValueError, json.JSONDecodeError):
+        except (TypeError, ValueError):
             return []
     if not isinstance(payload, list):
         return []
@@ -98,6 +96,7 @@ def record_matches_review_filter(
         for key in (
             "feature_id",
             "record_id",
+            "display_label",
             "location",
             "result_label",
             "gazetteer_name",
