@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.4.0 — 2026-07-27
+
+- Added a third **Match & Verify** tab and a dedicated toolbar/menu action.
+- Added nearby-feature scanning for a selected point layer or all visible point layers.
+- Added accent-insensitive name similarity, geodesic distance, explainable confidence scores and High/Medium/Low duplicate-risk classes.
+- Added explicit **Use existing** and **Create new** decisions; the plugin never resolves a duplicate automatically.
+- Added audit fields: `match_decision`, `matched_layer`, `matched_layer_id`, `matched_feature_id`, `match_distance_m`, `name_similarity`, `duplicate_risk`, `confidence_score` and `review_required`.
+- Added six coordinated SVG icons for match analysis and decisions.
+- Added pure-Python tests for normalisation, similarity, confidence, risk and candidate ordering.
+
 ## 1.3.0 — 2026-07-27
 
 - Added a tabbed **Search & Capture** workflow beside the existing Capture Log.
