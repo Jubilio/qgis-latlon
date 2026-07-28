@@ -1,0 +1,140 @@
+name: Publish plugin release
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-plugin-release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Read version
+        id: version
+        shell: bash
+        run: |
+          VERSION="$(tr -d '\r\n' < qgis_latlon/VERSION)"
+          if [ -z "$VERSION" ]; then
+            echo "The VERSION file is empty." >&2
+            exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=v$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Check whether release already exists
+        id: existing
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "Release $TAG already exists; nothing to publish."
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run plugin checks
+        if: steps.existing.outputs.exists == 'false'
+        run: |
+          python -m compileall -q qgis_latlon
+          python -m unittest discover -s tests -v
+
+      - name: Build installable ZIP and release notes
+        if: steps.existing.outputs.exists == 'false'
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          python - <<'PY'
+          from __future__ import annotations
+
+          import hashlib
+          import os
+          import re
+          import zipfile
+          from pathlib import Path
+
+          version = os.environ["VERSION"]
+          plugin = Path("qgis_latlon")
+          zip_path = Path(f"geoclick_capture-{version}.zip")
+
+          excluded_parts = {"__pycache__", ".pytest_cache"}
+          excluded_suffixes = {".pyc", ".pyo"}
+
+          with zipfile.ZipFile(
+              zip_path,
+              "w",
+              compression=zipfile.ZIP_DEFLATED,
+              compresslevel=9,
+          ) as archive:
+              for path in sorted(plugin.rglob("*")):
+                  if not path.is_file():
+                      continue
+                  relative = path.relative_to(plugin)
+                  if any(part in excluded_parts for part in relative.parts):
+                      continue
+                  if path.suffix.lower() in excluded_suffixes:
+                      continue
+
+                  info = zipfile.ZipInfo((plugin.name / relative).as_posix())
+                  info.date_time = (2026, 7, 28, 0, 0, 0)
+                  info.compress_type = zipfile.ZIP_DEFLATED
+                  info.external_attr = 0o644 << 16
+                  archive.writestr(info, path.read_bytes())
+
+          digest = hashlib.sha256(zip_path.read_bytes()).hexdigest()
+          Path(f"{zip_path.name}.sha256").write_text(
+              f"{digest}  {zip_path.name}\n",
+              encoding="utf-8",
+          )
+
+          changelog = (plugin / "CHANGELOG.md").read_text(encoding="utf-8")
+          match = re.search(
+              rf"^##\s+{re.escape(version)}[^\n]*\n(.*?)(?=^##\s|\Z)",
+              changelog,
+              flags=re.MULTILINE | re.DOTALL,
+          )
+          changes = match.group(1).strip() if match else "Maintenance release."
+          notes = (
+              f"## GeoClick Capture {version}\n\n"
+              f"{changes}\n\n"
+              "### Installation\n\n"
+              "In QGIS, open **Plugins → Manage and Install Plugins → "
+              "Install from ZIP**, then select the attached ZIP file.\n"
+          )
+          Path("release-notes.md").write_text(notes, encoding="utf-8")
+          PY
+
+      - name: Publish GitHub release
+        if: steps.existing.outputs.exists == 'false'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.version }}
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          ZIP="geoclick_capture-${VERSION}.zip"
+          gh release create "$TAG" \
+            "$ZIP" \
+            "$ZIP.sha256" \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title "GeoClick Capture ${VERSION}" \
+            --notes-file release-notes.md
