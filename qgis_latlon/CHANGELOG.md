@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.1 — 2026-07-28
+
+- Fixed plugin startup on QGIS 4, where `QgsProject` no longer exposes `customProperty()` or `setCustomProperty()`.
+- Added a compatibility entry point that persists the Verification Workspace through `QgsProject.readEntry()` and `QgsProject.writeEntry()`.
+- Preserved QGIS 3.28+ compatibility and safe fallback to a new workspace when stored project data is missing or invalid.
+
 ## 2.0.0 — 2026-07-27
 
 - Added a sixth **Verification Workspace** tab and a dedicated toolbar/menu action.
