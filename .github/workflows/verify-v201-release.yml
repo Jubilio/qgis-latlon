@@ -1,0 +1,49 @@
+name: Verify v2.0.1 release
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify release and assets
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view v2.0.1 \
+            --repo "$GITHUB_REPOSITORY" \
+            --json tagName,name,isDraft,isPrerelease,publishedAt,url,assets \
+            > release.json
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          data = json.loads(Path("release.json").read_text(encoding="utf-8"))
+          assets = {asset["name"] for asset in data.get("assets", [])}
+          required = {
+              "geoclick_capture-2.0.1.zip",
+              "geoclick_capture-2.0.1.zip.sha256",
+          }
+          missing = sorted(required - assets)
+          assert data.get("tagName") == "v2.0.1", data
+          assert data.get("name") == "GeoClick Capture 2.0.1", data
+          assert data.get("isDraft") is False, data
+          assert data.get("isPrerelease") is False, data
+          assert not missing, f"Missing release assets: {missing}"
+          print(json.dumps(data, indent=2))
+          PY
+
+      - name: Upload verification record
+        uses: actions/upload-artifact@v4
+        with:
+          name: v2.0.1-release-verification
+          path: release.json
+          if-no-files-found: error
