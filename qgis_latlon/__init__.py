@@ -2,6 +2,6 @@
 
 
 def classFactory(iface):
-    from .plugin_v200 import GeoClickCapturePluginV200
+    from .plugin_v201 import GeoClickCapturePluginV201
 
-    return GeoClickCapturePluginV200(iface)
+    return GeoClickCapturePluginV201(iface)
