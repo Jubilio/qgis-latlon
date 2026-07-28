@@ -1,0 +1,38 @@
+name: Build QGIS plugin ZIP
+
+on:
+  pull_request:
+    paths:
+      - "qgis_latlon/**"
+      - ".github/workflows/package-plugin.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Verify plugin version and syntax
+        run: |
+          test "$(cat qgis_latlon/VERSION)" = "2.0.1"
+          grep -q '^version=2.0.1$' qgis_latlon/metadata.txt
+          python -m compileall -q qgis_latlon
+
+      - name: Build installable plugin archive
+        run: |
+          zip -r geoclick_capture-2.0.1.zip qgis_latlon \
+            -x '*/__pycache__/*' '*.pyc' '*.pyo' '.DS_Store'
+          unzip -l geoclick_capture-2.0.1.zip
+
+      - name: Upload plugin archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: geoclick_capture-2.0.1
+          path: geoclick_capture-2.0.1.zip
+          if-no-files-found: error
+          compression-level: 0
