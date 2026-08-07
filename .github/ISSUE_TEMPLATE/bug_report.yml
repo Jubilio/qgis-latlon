@@ -1,0 +1,79 @@
+name: Bug report
+description: Report a reproducible problem in GeoClick Capture
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for helping improve GeoClick Capture. Do not include sensitive operational data, personal information or confidential evidence.
+  - type: input
+    id: qgis-version
+    attributes:
+      label: QGIS version
+      placeholder: "For example: 3.40.8 or 4.x"
+    validations:
+      required: true
+  - type: input
+    id: plugin-version
+    attributes:
+      label: GeoClick Capture version
+      placeholder: "For example: 2.0.1"
+    validations:
+      required: true
+  - type: dropdown
+    id: operating-system
+    attributes:
+      label: Operating system
+      options:
+        - Windows
+        - Linux
+        - macOS
+        - Other
+    validations:
+      required: true
+  - type: dropdown
+    id: workflow
+    attributes:
+      label: Affected workflow
+      options:
+        - Capture Log
+        - Search & Capture
+        - Match & Verify
+        - Offline Gazetteer
+        - Review Queue
+        - Verification Workspace
+        - Installation or startup
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Problem description
+      description: Explain what happened and what you expected.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open...
+        2. Select...
+        3. Observe...
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs
+      description: Paste non-sensitive QGIS log messages or error text.
+      render: shell
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Data-safety confirmation
+      options:
+        - label: I have removed sensitive, personal and confidential information from this report.
+          required: true
