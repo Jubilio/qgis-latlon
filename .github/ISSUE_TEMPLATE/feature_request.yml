@@ -1,0 +1,56 @@
+name: Feature request
+description: Suggest an improvement to GeoClick Capture
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Describe the operational problem first, then the proposed improvement. Do not share sensitive or confidential data.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Operational problem
+      description: What GIS or location-verification problem are you trying to solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed improvement
+      description: Describe the behaviour or capability you would like.
+    validations:
+      required: true
+  - type: dropdown
+    id: workflow
+    attributes:
+      label: Related workflow
+      options:
+        - Capture Log
+        - Search & Capture
+        - Match & Verify
+        - Offline Gazetteer
+        - Review Queue
+        - Verification Workspace
+        - Export and reporting
+        - New workflow
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: value
+    attributes:
+      label: Who would benefit?
+      description: Mention the user group or sector and the expected benefit.
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Current workaround
+      description: Explain how the task is currently completed, if applicable.
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Data-safety confirmation
+      options:
+        - label: I have not included sensitive, personal or confidential information.
+          required: true
