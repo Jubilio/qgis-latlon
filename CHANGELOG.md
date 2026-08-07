@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.0.1 — 2026-07-27
+
+- Fixed QGIS 4 workspace persistence by replacing unsupported QgsProject custom-property calls with the compatible readEntry and writeEntry API.
+- Updated project and packaged documentation to reference version 2.0.1.
+- Added clearer installation, feedback, citation and verification-workflow guidance.
+- Added structured GitHub templates for bug reports and feature requests.
+
 ## 2.0.0 — 2026-07-27
 
 - Added a unified **Location Verification Workspace** for online, offline, manual and QGIS source candidates.
@@ -64,12 +71,12 @@
 
 ## 1.2.5 — 2026-07-23
 
-- Treats Nominatim's `Unable to geocode` response as a valid no-result condition.
-- Adds progressive fallback from detailed address to settlement, city, state/province and country levels.
-- Adds `layer=address` and an identifying email parameter to reverse requests.
-- Preserves one-request-per-second spacing between fallback requests.
-- Stores broader successful results as approximate place names.
-- Keeps the point saved without a place name when OpenStreetMap has no suitable object.
+- Treated Nominatim's `Unable to geocode` response as a valid no-result condition.
+- Added progressive fallback from detailed address to settlement, city, state/province and country levels.
+- Added `layer=address` and an identifying email parameter to reverse requests.
+- Preserved one-request-per-second spacing between fallback requests.
+- Stored broader successful results as approximate place names.
+- Kept the point saved without a place name when OpenStreetMap has no suitable object.
 
 ## 1.2.4 — 2026-07-23
 
