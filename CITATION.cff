@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use GeoClick Capture in your work, please cite it using this metadata."
+title: "GeoClick Capture: A QGIS plugin for transparent geospatial location verification"
+type: software
+authors:
+  - family-names: "Maússe"
+    given-names: "Jubílio"
+repository-code: "https://github.com/Jubilio/qgis-latlon"
+url: "https://plugins.qgis.org/plugins/qgis_latlon/"
+license: MIT
+version: 2.0.1
+date-released: 2026-07-27
+keywords:
+  - QGIS
+  - GIS
+  - location verification
+  - geocoding
+  - audit trail
+  - gazetteer
+  - geospatial data quality
